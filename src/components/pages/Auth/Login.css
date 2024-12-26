@@ -1,0 +1,59 @@
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    margin: 0 auto;
+    height: 80vh;
+}
+
+.login__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.login__content input{
+    font-family: 'Jua';
+    color: var(--primary-color);
+    background-color: transparent;
+    font-size: var(--font-size-medium);
+    border: none;
+    border-bottom: 2px solid var(--secondary-color);;
+}
+
+.login__content canvas {
+    z-index: 1;
+    top: 3rem;
+    stroke: red !important;
+}
+
+.login__options {
+    font-size: var(--font-size-medium);
+    color: var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.login__title {
+    color: var(--primary-color);
+    font-size: var(--font-size-large);;
+}
+
+.login__input {
+    margin-bottom: 1.5rem;
+}
+
+.login__options {
+    margin-top: 0.5rem;
+}
+
+.login__button {
+    transition: color 0.3s ease;   
+}
+
+.login__button:hover {
+    color: var(--accent-color);
+    cursor: pointer;
+}

@@ -1,0 +1,165 @@
+@media (min-width: 1200px) {
+    .user-settings  {
+        width: 600px;
+		margin: 0 auto;
+        margin-top: 1rem;
+	}	
+}
+
+@media (min-width: 1440px) {
+	.user-settings  {
+		width: 800px;
+		margin: 0 auto;
+        margin-top: 1rem;
+	}	
+}
+
+@media (min-width: 1920px) {
+	.user-settings  {
+		width: 1100px; 
+		margin: 0 auto; 
+        margin-top: 1rem;
+	}
+}
+
+.user-settings {
+    color: var(--primary-color);
+}
+
+.user-settings__header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.user-settings__user {
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+}
+
+.user-settings__user-avatar img{
+    width: 6rem;
+    height: 6rem;
+    margin-top: 0.5rem;
+}
+
+.user-settings__username {
+    font-size: var(--font-size-large);
+}
+
+.user-settings__email {
+    font-size: var(--font-size-medium);
+    color: var(--secondary-color);
+}
+
+.user-settings__user-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-settings__user-meta span {
+    line-height: normal;
+}
+
+
+.user-settings__password .login__content, .user-settings__tab-email .login__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+
+.login__content input{
+    font-family: 'Jua';
+    color: var(--primary-color);
+    background-color: transparent;
+    font-size: var(--font-size-medium);
+    border: none;
+    border-bottom: 2px solid var(--secondary-color);;
+}
+
+.user-settings__tab {
+    display: block;
+}
+
+.user-settings__footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.user-settings__tab-options {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5rem;
+    font-size: var(--font-size-medium);
+    margin: 3rem;
+}
+
+.user-settings__tab-option {
+    transition: color 0.3s ease;
+    color: var(--secondary-color);
+}
+
+.user-settings__tab-option:hover {
+    color: var(--accent-color);
+    cursor: pointer;
+}
+
+.user-settings__tab-option.active {
+    color: var(--primary-color);
+}
+
+.user-settings__password {
+    margin-top: 8rem;
+}
+
+.user-settings__change-password, .user-settings__change-email{
+    font-size: var(--font-size-medium);
+    margin-top: 1rem;
+}
+
+.user-settings__change-password:hover, .user-settings__change-email:hover {
+    cursor: pointer;
+    color: var(--hover-color);
+}
+
+.user-settings__tab-email {
+    margin-top: 10rem;
+}
+
+.user-settings__tab-pfp {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5rem;
+}
+
+.user-settings__pfps {
+    width: 50rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.user-settings__pfp img {
+    width: 6rem;
+    height: 6rem;
+}
+
+.user-settings__pfp {
+    transition: transform 0.2s ease;
+}
+
+.user-settings__pfp:hover {
+    transform: perspective(1000px) translateZ(100px);
+}
