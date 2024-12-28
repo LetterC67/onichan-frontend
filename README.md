@@ -16,7 +16,7 @@ the web forum is fully functional equiped with essential features:
 
 clone the repo:
 ```sh
-git clone 
+git clone https://github.com/LetterC67/onichan-frontend.git
 cd onichan-frontend
 ```
 
@@ -37,7 +37,7 @@ npm run build
 ```
 
 ## docker setup
-alternatively, one can run the frontend as a docker container.
+alternatively, one can run the frontend as a docker container. make sure you have docker installed.
 
 build the docker image:
   ```sh
