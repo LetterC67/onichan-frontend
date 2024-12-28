@@ -5,7 +5,7 @@ import PaginationBar from "../../pagination/PaginationBar/PaginationBar";
 import { getPosts, searchTitle } from "../../../api/post";
 import { SearchSVG, ChickenSVG } from "../../svg";
 import Loading from "../../Loading";
-import { Post } from "../../../interfaces";
+import { Post, SearchResponse, GetPostsResponse } from "../../../interfaces";
 
 function CategoryPage(): JSX.Element {
     const navigate = useNavigate();
@@ -14,31 +14,31 @@ function CategoryPage(): JSX.Element {
     const { page = '1'} = useParams() as { page: string };
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const search = searchParams.get('search') || '';
+    const search = searchParams.get('search') ?? '';
     const [posts, setPosts] = useState<Post[] | null>(null);
 
     useEffect(() => {
         if(search !== '') {
-            searchTitle(page, search, id).then((data: any) => {
-                setPosts(data.posts);
-                setMaxPages(parseInt(data.total_pages));
+            searchTitle(page, search, id).then((data: SearchResponse) => {
+                setPosts(data.posts ?? []);
+                setMaxPages(data.total_pages ?? 1);
             }).catch((error) => {
                 console.error('Failed to fetch posts:', error);
                 setPosts([]);
             });
         } else {
-            getPosts(id, page).then((data: any) => {
-                setPosts(data.posts);
-                setMaxPages(parseInt(data.total_pages));
+            getPosts(id, page).then((data: GetPostsResponse) => {
+                setPosts(data.posts ?? []);
+                setMaxPages(data.total_pages ?? 1);
             }).catch((error) => {
                 console.error('Failed to fetch posts:', error);
                 setPosts([]);
             });
         }
-    }, [page, search]);
+    }, [page, search, id]);
 
     function onPageChange(page: string | number): void {
-        navigate(`/category/${id}/${page}`);
+        void navigate(`/category/${id}/${page}`);
     }
 
     return (
@@ -71,7 +71,7 @@ function CategoryPage(): JSX.Element {
                             <tbody>
                             {posts?.map((post) => (
                                 <tr key={post.ID} className="category-post" onClick={() => {
-                                    navigate(`/category/${id}/post/${post.ID}`);
+                                    void navigate(`/category/${id}/post/${post.ID}`);
                                 }}>
                                     <td className="category-post__left">
                                         <div className="category-post__avatar">
@@ -116,7 +116,7 @@ function CategoryPage(): JSX.Element {
                 </div>
             }
 
-            {maxPages > 1 && <PaginationBar maxPages={maxPages} currentPage={page} onPageChange={onPageChange} />}
+            {maxPages > 1 && <PaginationBar maxPages={maxPages} currentPage={parseInt(page)} onPageChange={onPageChange} />}
         </>
     )
 }

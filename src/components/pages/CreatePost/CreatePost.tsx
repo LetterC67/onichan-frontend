@@ -10,17 +10,12 @@ import { useNavigate } from "react-router-dom";
 import { upload } from "../../../api/upload";
 import { API_URL } from "../../../api/apiClient";
 import { useAuth } from "../../../contexts/AuthContext";
+import { scrollToBottom } from "../../utils";
+import { CreatePostResponse, UploadResponse } from "../../../interfaces";
 
 import { EyeSVG, EditSVG, TickSVG, PlusSVG } from "../../svg";
 
-
-
-const scrollToBottom = () => {
-    window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
-}
-
-
-function CreatePost() {
+function CreatePost(): JSX.Element {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [title, setTitle] = useState<string>("");
     const [textareaValue, setTextareaValue] = useState<string>("");
@@ -42,11 +37,12 @@ function CreatePost() {
     }, [textareaRef.current?.style.height]);
 
     useEffect(() => {
-        const handlePaste = (event: any) => {
-            const clipboardItems = event.clipboardData.items;
-            let imageFound = false;
-            let file = null;
+        const handlePaste = (event: ClipboardEvent): void => {
+            const clipboardItems = event.clipboardData?.items;
+            let imageFound: boolean = false;
+            let file: File | null = null;
         
+            if (!clipboardItems) return;
             for (const item of clipboardItems) {
                 if (item.type.startsWith("image/")) {
                     file = item.getAsFile();
@@ -58,7 +54,8 @@ function CreatePost() {
         
             if (imageFound) {
                 event.preventDefault();
-                upload(file).then((data: any) => {
+                if (!file) return;
+                upload(file).then((data: UploadResponse) => {
                     setTextareaValue(textareaValue + `![image](${API_URL + "/" + data.path})`);
                     notification("image uploaded successfully", "success");
                 }).catch((error) => {
@@ -68,17 +65,18 @@ function CreatePost() {
             }
         };
 
-        textareaRef.current?.addEventListener("paste", handlePaste);
+        const textarea = textareaRef.current;
+        textarea?.addEventListener("paste", handlePaste);
 
-        return () => {
-            textareaRef.current?.removeEventListener("paste", handlePaste);
+        return (): void => {
+            textarea?.removeEventListener("paste", handlePaste);
         };
-    }, []);
+    }, [notification, textareaValue]);
 
-    function onPost() {
-        post(category ? category.ID : 0, textareaValue, title).then((data: any) => {
+    function onPost(): void {
+        post(category ? category.ID : 0, textareaValue, title).then((data: CreatePostResponse) => {
             notification("post created successfully", "success");
-            navigate(`/category/${category?.ID}/post/${data.id}`);
+            void navigate(`/category/${category?.ID}/post/${data.id}`);
         }).catch(() => {
             notification("failed to create post", "success");
         });
@@ -123,7 +121,7 @@ function CreatePost() {
             }
 
             {!user &&
-                <div className="create-post-page__please-login" onClick={() => navigate("/login")}>
+                <div className="create-post-page__please-login" onClick={() => void navigate("/login")}>
                     <span>
                         please login to post  
                     </span>

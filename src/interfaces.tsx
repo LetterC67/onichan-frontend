@@ -36,7 +36,7 @@ interface DecodedToken {
 
 interface AuthContextType {
     user: User | null;
-    login: (username: string, password: string) => Promise<any>;
+    login: (username: string, password: string) => Promise<LoginResponse>;
     logout: () => void;
     reload: () => void;
     jwt: string | null;
@@ -71,6 +71,97 @@ interface Avatar {
     avatar_url: string;
 }
 
+interface Notification {
+    ID: number;
+    user_id: number;
+    from_user_id: number;
+    post_id: number;
+    post: Post;
+    from_user: User;
+    notification_type: string;
+    is_read: boolean;
+}
+
+interface GetPostsResponse {
+    posts?: Post[];
+    total_pages?: number;
+    error?: string;
+}
+
+interface GetPostResponse {
+    posts?: Post[];
+    master_post?: Post;
+    total_pages?: number;
+    error?: string;
+}
+
+interface ToggleReactionResponse {
+    message?: string;
+    error?: string;
+}
+
+interface CreatePostResponse {
+    error?: string;
+    page?: number;
+    id?: number;
+}
+
+interface SearchResponse     {
+    posts?: Post[];
+    total_pages?: number;
+    error?: string;
+}
+
+interface CreateReportResponse {
+    error?: string;
+    message?: string;
+    id?: number;
+}
+
+interface GetReportsResponse {
+    reports?: Report[];
+    error?: string;
+    total_pages?: number;
+}
+
+interface ResolveReportResponse {
+    error?: string;
+    message?: string;
+}
+
+interface UploadResponse {
+    error?: string;
+    message?: string;
+    path?: string;
+}
+
+interface LoginResponse {
+    token?: string;
+    error?: string;
+}
+
+interface RegisterResponse {
+    message?: string;
+    error?: string;
+}
+
+interface ChangeEmailResponse {
+    message?: string;
+    error?: string;
+}
+
+interface ChangePasswordResponse {
+    message?: string;
+    error?: string;
+}
+
+
+interface ChangeAvatarResponse {
+    message?: string;
+    error?: string;
+}
+
+
 export type {
     Category,
     Report,
@@ -80,5 +171,20 @@ export type {
     Post,
     PostReactionsCount,
     Reaction,
-    Avatar
+    Avatar,
+    Notification,
+    GetPostsResponse,
+    GetPostResponse,
+    ToggleReactionResponse,
+    CreatePostResponse,
+    SearchResponse,
+    CreateReportResponse,
+    GetReportsResponse,
+    ResolveReportResponse,
+    UploadResponse,
+    LoginResponse,
+    RegisterResponse,
+    ChangeEmailResponse,
+    ChangePasswordResponse,
+    ChangeAvatarResponse
 }

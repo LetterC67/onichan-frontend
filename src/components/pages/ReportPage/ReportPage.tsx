@@ -6,7 +6,7 @@ import { ChickenSVG } from "../../svg";
 import { useAuth } from "../../../contexts/AuthContext";
 import PaginationBar from "../../pagination/PaginationBar/PaginationBar";
 import { useNavigate } from "react-router-dom";
-import { Report } from "../../../interfaces";
+import { GetReportsResponse, Report } from "../../../interfaces";
 import ReportComponent from "./ReportComponent";
 
 
@@ -18,17 +18,17 @@ function ReportPage(): JSX.Element {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getReports(page).then((data: any) => {
-            setReports(data.reports);
-            setMaxPages(data.total_pages);
+        getReports(page).then((data: GetReportsResponse) => {
+            setReports(data.reports ?? []);
+            setMaxPages(data.total_pages ?? 1);
         }).catch((error) => {
             console.error('Failed to fetch report:', error);
             setReports([]);
         });
     }, [page])
 
-    function onPageChange(page: string | number) {
-        navigate(`/reports/${page}`);
+    function onPageChange(page: string | number): void {
+        void navigate(`/reports/${page}`);
     }
 
     return (
@@ -57,7 +57,7 @@ function ReportPage(): JSX.Element {
                 </div>
             }
 
-            {maxPages > 1 && <PaginationBar maxPages={maxPages} currentPage={page} onPageChange={onPageChange} />}
+            {maxPages > 1 && <PaginationBar maxPages={maxPages} currentPage={parseInt(page)} onPageChange={onPageChange} />}
         </>
     )
 }

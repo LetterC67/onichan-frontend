@@ -7,7 +7,6 @@ import {
 	FC
 } from 'react';
 
-// Define the possible notification types
 type NotificationType = 'info' | 'success' | 'error';
 
 interface NotificationContextType {
@@ -32,8 +31,8 @@ const [hideTimer, setHideTimer] = useState<number | null>(null);
 
 const showNotification = useCallback(
 	(message: string, type: NotificationType = 'info', duration = 3000) => {
-		if (hideTimer) {
-		clearTimeout(hideTimer);
+		if (hideTimer !== null) {
+			clearTimeout(hideTimer);
 		}
 
 		setNotification({ message, type });
@@ -48,7 +47,7 @@ const showNotification = useCallback(
 	[hideTimer]
 );
 
-const getNotificationClass = () => {
+const getNotificationClass = (): string => {
 	if (!notification) return 'notification-wrapper';
 	return `notification-wrapper ${notification.type} ${isVisible ? 'visible' : ''}`;
 };

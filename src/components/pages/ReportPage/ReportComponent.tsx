@@ -19,7 +19,7 @@ function ReportComponent({ report }: ReportComponentProps): JSX.Element {
         setDone(false);
     }, [post])
 
-    function onResolve(action: boolean) {
+    function onResolve(action: boolean): void {
         resolveReport(report.ID, action).then(() => {
             setDone(true);
             notification('report resolved', 'success');

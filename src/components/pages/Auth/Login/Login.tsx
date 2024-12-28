@@ -1,11 +1,12 @@
 import "./../Login.css";
-import React, { useEffect, useState, useRef } from "react";
-import rough from "roughjs";
+import { useEffect, useState, useRef, useCallback } from "react";
 import LoginSVG from "../../../../assets/images/login.svg"
 import { useNotification } from "../../../../contexts/NotificationContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { Input } from "../../../utils";
+import { drawRoughBorder } from "../../../utils";
+import { LoginResponse } from "../../../../interfaces";
 
 function Login(): JSX.Element {
     const [username, setUsername] = useState<string>("");
@@ -18,21 +19,23 @@ function Login(): JSX.Element {
 
     const { login } = useAuth();
 
-    const drawRoughBorder = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
-        const canvas = canvasRef.current;
-        if (canvas) {
-            const rc = rough.canvas(canvas);
-            const width = canvas.offsetWidth;
-            
-            const color = getComputedStyle(document.documentElement).getPropertyValue("--secondary-color").trim();
-           
-            rc.line(0, 0, width, 0, {
-                roughness: 2,
-                strokeWidth: 2,
-                stroke: color,
-            });
+    const onLogin = useCallback((): void => {
+        if (username === "" || password === "") {
+            showNotification("please fill in all fields", "error");
+            return;
         }
-    };
+        
+        login(username, password).then((data: LoginResponse) => {
+            if (data.error != null) {
+                showNotification(data.error.toLowerCase(), "error");
+            } else {
+                showNotification("login successful", "success");
+                void navigate("/");
+            }
+        }).catch (() => {
+        showNotification("an unexpected error occurred", "error");
+        });
+    }, [username, password, showNotification, navigate, login]);
 
     useEffect(() => {
         drawRoughBorder(usernameCanvasRef);
@@ -40,7 +43,7 @@ function Login(): JSX.Element {
     }, []);
 
     useEffect(() => {
-        const handleEnter = (event: KeyboardEvent) => {
+        const handleEnter = (event: KeyboardEvent): void => {
             if (event.key === "Enter") {
                 onLogin();
             }
@@ -48,30 +51,10 @@ function Login(): JSX.Element {
 
         document.addEventListener("keydown", handleEnter);
 
-        return () => {
+        return (): void => {
             document.removeEventListener("keydown", handleEnter);
         };
-    }, [username, password]);
-
-    async function onLogin() {
-        if (username === "" || password === "") {
-            showNotification("please fill in all fields", "error");
-            return;
-        }
-        
-        try {
-            await login(username, password).then((data: any) => {
-                if (data.error) {
-                    showNotification(data.error.toLowerCase(), "error");
-                } else {
-                    showNotification("login successful", "success");
-                    navigate("/");
-                }
-            });
-        } catch (error) {
-            showNotification("an unexpected error occurred", "error");
-        }
-    }
+    }, [username, password, onLogin]);
 
     return (
         <div className="login">

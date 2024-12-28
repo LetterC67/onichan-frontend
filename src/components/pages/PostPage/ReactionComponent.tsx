@@ -18,7 +18,7 @@ function ReactionComponent({
     };
 
     return (
-        <div className={`post-page__reaction-wrapper ${reactionCounts.get(reaction.emoji) && reactionCounts.get(reaction.emoji)! > 0 ? 'visible' : ''}`}>
+        <div className={`post-page__reaction-wrapper ${(reactionCounts.get(reaction.emoji) != null && reactionCounts.get(reaction.emoji)! > 0) ? 'visible' : ''}`}>
             <div className={`post-page__reaction ${userReactions.has(reaction.emoji) ? 'selected' : ''}`} onClick={_toggleReaction}>
                 <span>{reaction.emoji}</span>
                 <span>{reactionCounts.get(reaction.emoji)}</span>

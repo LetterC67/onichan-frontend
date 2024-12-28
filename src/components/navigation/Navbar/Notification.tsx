@@ -4,11 +4,12 @@ import { useAuth } from "../../../contexts/AuthContext";
 import useWebSocket from "react-use-websocket";
 import { getUnreadNotifications, readNotifications } from "../../../api/notification";
 import { BellFilledSVG, BellSVG, ChickenSVG } from "../../svg";
+import { Notification } from "../../../interfaces";
 
 const WS_URL = import.meta.env.VITE_APP_WS_URL;
 
-function Notification() {   
-    const [notifications, setNotifications] = useState<any>([]);
+function NotificationComponent(): JSX.Element {   
+    const [notifications, setNotifications] = useState<Notification[]>([]);
     const [visible, setVisible] = useState<boolean>(false);
     const [isRead, setIsRead] = useState<boolean>(true);
     const notificationRef = useRef<HTMLDivElement>(null);
@@ -16,20 +17,18 @@ function Notification() {
 
     const { jwt } = useAuth();
 
-    const { lastJsonMessage } = useWebSocket<{ type: string, data: any }>(WS_URL + "/ws?token=" + jwt, {
+    const { lastJsonMessage } = useWebSocket<{ type: string, data: Record<string, unknown> }>(WS_URL + "/ws?token=" + jwt, {
         share: true,
         shouldReconnect: () => true,
     });
 
     useEffect(() => {
-        if(lastJsonMessage) {
+        if(lastJsonMessage !== null && lastJsonMessage !== undefined) {
             if (lastJsonMessage?.type == "notification") {
-                setNotifications((notifications: any) => [lastJsonMessage.data, ...notifications]);
+                setNotifications((notifications: Notification[]) => [lastJsonMessage.data as unknown as Notification, ...notifications]);
                 setIsRead(false);
             }
         }
-
-        //console.log(`Got a new message: ${JSON.stringify(lastJsonMessage)}`);
     }, [lastJsonMessage])
     
     useEffect(() => {
@@ -42,7 +41,7 @@ function Notification() {
     }, []);
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent): void => {
             if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
                 setVisible(false);
             }
@@ -50,7 +49,7 @@ function Notification() {
 
         document.addEventListener('mousedown', handleClickOutside);
 
-        return () => {
+        return (): void => {
             document.removeEventListener('mousedown', handleClickOutside);
         }
     }, []);
@@ -64,7 +63,7 @@ function Notification() {
     useEffect(() => {
         if(visible) {
             setIsRead(true);
-            readNotifications();
+            void readNotifications();
         }
     }, [visible]);
 
@@ -73,12 +72,12 @@ function Notification() {
             {!isRead && <BellFilledSVG/>}
             {isRead && <BellSVG/>}
             <div ref={notificationRef} className={`navbar__notifications ${visible ? 'visible' : ''}`}>
-                {notifications.map((notification: any) => (
+                {notifications.map((notification: Notification) => (
                     <div key={notification.ID} className="navbar____notification" onClick={(event) => 
                         {
                             event.stopPropagation();
                             setVisible(false);
-                            navigate(`/category/${notification.post.category.name}/post/${notification.post.parent_post_id}/${notification.post.page}?goto=${notification.post.ID}`)
+                            void navigate(`/category/${notification.post.category.name}/post/${notification.post.parent_post_id}/${notification.post.page}?goto=${notification.post.ID}`)
                         }
                     }>
                         <span>
@@ -104,4 +103,4 @@ function Notification() {
     )
 }
 
-export default Notification;
+export default NotificationComponent;

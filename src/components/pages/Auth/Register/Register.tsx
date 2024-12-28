@@ -1,10 +1,11 @@
 import "./../Login.css";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import LoginSVG from "../../../../assets/images/login.svg";
 import { register } from "../../../../api/auth";
 import { useNotification } from "../../../../contexts/NotificationContext";
 import { useNavigate } from "react-router-dom";
 import { Input, drawRoughBorder } from "../../../utils";
+import { RegisterResponse } from "../../../../interfaces";
 
 function Register(): JSX.Element {
     const [username, setUsername] = useState<string>("");
@@ -27,21 +28,7 @@ function Register(): JSX.Element {
         drawRoughBorder(confirmPasswordCanvasRef);
     }, []);
 
-    useEffect(() => {
-        const handleEnter = (event: KeyboardEvent) => {
-            if (event.key === "Enter") {
-                onRegister();
-            }
-        };
-
-        document.addEventListener("keydown", handleEnter);
-
-        return () => {
-            document.removeEventListener("keydown", handleEnter);
-        };
-    }, [username, password]);
-
-    async function onRegister() {
+    const onRegister = useCallback((): void => {
         if (username === "" || password === "" || email === "" || confirmPassword === "") {
             showNotification("please fill in all fields", "error");
             return;
@@ -57,19 +44,32 @@ function Register(): JSX.Element {
             return;
         }
         
-        try {
-            await register(username, email, password).then((data: any) => {
-                if (data.error) {
-                    showNotification(data.error.toLowerCase(), "error");
-                } else {
-                    showNotification("registration successful, you can now login", "success");
-                    navigate("/login");
-                }
-            });
-        } catch (error) {
+        register(username, email, password).then((data: RegisterResponse) => {
+            if (data.error != null) {
+                showNotification(data.error.toLowerCase(), "error");
+            } else {
+                showNotification("registration successful, you can now login", "success");
+                void navigate("/login");
+            }
+        }).catch(() => {
             showNotification("an unexpected error occurred", "error");
-        }
-    }
+        });
+    }, [username, email, password, confirmPassword, showNotification, navigate]);
+
+    useEffect(() => {
+        const handleEnter = (event: KeyboardEvent): void => {
+            if (event.key === "Enter") {
+                onRegister();
+            }
+        };
+
+        document.addEventListener("keydown", handleEnter);
+
+        return (): void => {
+            document.removeEventListener("keydown", handleEnter);
+        };
+    }, [username, password, confirmPassword, email, showNotification, navigate, onRegister]);
+
 
     return (
         <div className="login">

@@ -1,13 +1,13 @@
 import rough from "roughjs";
 
-const scrollToBottom = () => {
+const scrollToBottom = (): void => {
     window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
 }
 
 
-function scrollPostIntoView(postID: string | number) {
+function scrollPostIntoView(postID: string | number): void {
     const post = document.getElementById(`post-${postID}`);
-    const navbarHeight = document.querySelector('.navbar')?.clientHeight || 0;
+    const navbarHeight = document.querySelector('.navbar')?.clientHeight ?? 0;
 
 
     if (post) {
@@ -21,18 +21,26 @@ function scrollPostIntoView(postID: string | number) {
     }
 }
 
-const Input = (props: any) => {
+interface InputProps {
+    placeholder: string;
+    type?: string;
+    value: string;
+    setValue: (value: string) => void;
+    canvasRef: React.RefObject<HTMLCanvasElement>;
+}
+
+const Input = ({placeholder, type, value, setValue, canvasRef}: InputProps): JSX.Element => {
     return (
         <div style={{ position: "relative" }}>
             <input
-                placeholder={props.placeholder}
-                type={props.type ? props.type : "password"}
-                value={props.value}
-                onChange={(e) => props.setValue(e.target.value)}
+                placeholder={placeholder}
+                type={type ?? "password"}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
                 style={{ width: "100%", border: "none", outline: "none" }}
             />
             <canvas
-                ref={props.canvasRef}
+                ref={canvasRef}
                 style={{
                     position: "absolute",
                     bottom: 0,
@@ -45,7 +53,7 @@ const Input = (props: any) => {
     )
 }
 
-const drawRoughBorder = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
+const drawRoughBorder = (canvasRef: React.RefObject<HTMLCanvasElement>): void => {
     const canvas = canvasRef.current;
     if (canvas) {
         const rc = rough.canvas(canvas);

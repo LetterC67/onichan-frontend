@@ -10,21 +10,22 @@ interface CategoryContextType {
 
 const CategoryContext = createContext<CategoryContextType | undefined>(undefined);
 
-function CategoryProvider({ children }: { children: ReactNode }) {
+function CategoryProvider({ children }: { children: ReactNode }): JSX.Element {
     const [category, setCategory] = useState<Category | null>(null);
     const location = useLocation();
 
-    function getCategoryFromURL(): string {
-        const parts = location.pathname.split('/').filter(part => part !== '');
-
-        if (parts.length >= 2 && parts[0] === 'category') {
-            return parts[1];
+    
+    useEffect(() => {
+        function getCategoryFromURL(): string {
+            const parts = location.pathname.split('/').filter(part => part !== '');
+    
+            if (parts.length >= 2 && parts[0] === 'category') {
+                return parts[1];
+            }
+    
+            return "";
         }
 
-        return "";
-    }
-
-    useEffect(() => {
         const category:(string) = getCategoryFromURL();
 
         if (category === "") {
@@ -32,7 +33,7 @@ function CategoryProvider({ children }: { children: ReactNode }) {
             return;
         }
 
-        getCategory(category).then((data: any) => {
+        getCategory(category).then((data: Category) => {
             setCategory(data);
         }).catch((error) => {
             console.error('Failed to fetch category:', error);
@@ -47,7 +48,7 @@ function CategoryProvider({ children }: { children: ReactNode }) {
     );
 }
 
-function useCategory() {
+function useCategory(): CategoryContextType {
     const context = useContext(CategoryContext);
     if (context === undefined) {
         throw new Error('useCategory must be used within a CategoryProvider');

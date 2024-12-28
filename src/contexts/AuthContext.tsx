@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { login as apiLogin } from '../api/auth';
 import {jwtDecode} from 'jwt-decode';
 import { getUser } from '../api/user';
+import { LoginResponse } from '../interfaces';
 
 interface User {
     ID: number;
@@ -18,29 +19,29 @@ interface DecodedToken {
 
 interface AuthContextType {
     user: User | null;
-    login: (username: string, password: string) => Promise<any>;
-    logout: () => void;
-    reload: () => void;
+    login: (username: string, password: string) => Promise<LoginResponse>;
+    logout: () => Promise<void>;
+    reload: () => Promise<void>;
     jwt: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-function AuthProvider({ children }: { children: ReactNode }) {
+function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
     const [user, setUser] = useState<User | null>(null);
     const [jwt, setJwt] = useState<string | null>(null);
 
-    function writeJwtToCookie(jwt: string) {
+    function writeJwtToCookie(jwt: string): void {
         const cookieValue = `Bearer ${jwt}`;
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 120);
         document.cookie = `Authorization=${cookieValue}; path=/; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
     }
 
-    function readJwtFromCookie() {
+    function readJwtFromCookie(): string | null {
         const cookies = document.cookie.split("; ");
         const authorizationCookie = cookies.find(cookie => cookie.startsWith("Authorization="));
-        if (authorizationCookie) {
+        if (authorizationCookie != null) {
             const value = authorizationCookie.split("=")[1];
             if (value.startsWith("Bearer ")) {
                 return value.slice(7);
@@ -49,27 +50,27 @@ function AuthProvider({ children }: { children: ReactNode }) {
         return null;
     }
 
-    async function login(username: string, password: string) {
-        return apiLogin(username, password).then((data: any) => {
-            if (!data.error) {
-                writeJwtToCookie(data.token);
-                setJwt(data.token);
+    async function login(username: string, password: string): Promise<LoginResponse> {
+        return apiLogin(username, password).then((data: LoginResponse) => {
+            if (data.error == null) {
+                writeJwtToCookie(data.token ?? '');
+                setJwt(data.token ?? '');
             }
             return data;
         });
     }
 
-    async function logout() {
+    async function logout(): Promise<void> {
         document.cookie = 'Authorization=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
         setJwt(null);
         setUser(null);
     }
 
-    async function reload() {
+   const reload = useCallback(async (): Promise<void> => {
         try {
-            if (jwt) {
+            if (jwt != null) {
                 const decoded: DecodedToken = jwtDecode(jwt);
-                getUser(decoded.user_id).then((data: any) => {
+                getUser(decoded.user_id).then((data: User) => {
                     setUser(data);
                 }).catch((error: unknown) => {
                     console.error('Failed to fetch user:', error);
@@ -78,10 +79,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
             } else {
                 setUser(null);
             }
-        } catch (error) {
+        } catch {
             setUser(null);
         }
-    }
+    }, [jwt]);
 
     useEffect(() => {
         const jwt = readJwtFromCookie();
@@ -89,8 +90,8 @@ function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     useEffect(() => {
-        reload();
-    }, [jwt]);
+        void reload();
+    }, [jwt, reload]);
 
     return (
         <AuthContext.Provider value={{ user, login, logout, reload, jwt}}>
@@ -99,7 +100,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
     );
 }
 
-function useAuth() {
+function useAuth(): AuthContextType {
     const context = useContext(AuthContext);
     if (context === undefined) {
         throw new Error('useAuth must be used within an AuthProvider');

@@ -13,7 +13,7 @@ import { Route, Routes } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import 'overlayscrollbars/overlayscrollbars.css';
 
-function ScrollToTop() {
+function ScrollToTop(): null {
     const { pathname } = useLocation();
 
     useEffect(() => {

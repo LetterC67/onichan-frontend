@@ -1,6 +1,6 @@
 import { FireSVG } from "./svg";
 
-function Loading() {
+function Loading(): JSX.Element {
     return (
         <div className="loading">
             <FireSVG />

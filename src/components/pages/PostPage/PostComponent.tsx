@@ -1,4 +1,4 @@
-import { Post, Reaction } from "../../../interfaces";
+import { Post, PostReactionsCount, Reaction, ToggleReactionResponse } from "../../../interfaces";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Markdown from 'react-markdown'
@@ -30,20 +30,20 @@ function PostComponent({ post, search, setReplyTo }: PostComponentProps): JSX.El
     const { user } = useAuth();
     const notification = useNotification();
 
-    const addReaction = (key: string) => {
+    const addReaction = (key: string): void => {
         setReactionCounts((prevMap) => {
             const updatedMap = new Map(prevMap);
-            const currentValue = updatedMap.get(key) || 0;
+            const currentValue = updatedMap.get(key) ?? 0;
             updatedMap.set(key, currentValue + 1);
             return updatedMap;
         });
         userReactions.add(key);
     };
 
-    const removeReaction = (key: string) => {
+    const removeReaction = (key: string): void => {
         setReactionCounts((prevMap) => {
             const updatedMap = new Map(prevMap);
-            const currentValue = updatedMap.get(key) || 0;
+            const currentValue = updatedMap.get(key) ?? 0;
             updatedMap.set(key, currentValue - 1);
             return updatedMap;
         });
@@ -51,7 +51,7 @@ function PostComponent({ post, search, setReplyTo }: PostComponentProps): JSX.El
     };
     
     useEffect(() => {
-        if (post.reactions) {
+        if (post.reactions.length > 0) {
             const reactionCounts = new Map<string, number>();
             post.reactions.forEach((reaction) => {
                 reactionCounts.set(reaction.reaction.emoji, reaction.count);
@@ -66,30 +66,30 @@ function PostComponent({ post, search, setReplyTo }: PostComponentProps): JSX.El
         setUserReactions(userReactions);
     }, [post]);
 
-    const _toggleReaction = (reaction: Reaction) => {
+    const _toggleReaction = (reaction: Reaction): void => {
         if(!user) {
             notification("you must be logged in to react to a post", "error");
             return;
         }
 
-        toggleReaction(post.ID, reaction.ID).then((data: any) => {
+        toggleReaction(post.ID, reaction.ID).then((data: ToggleReactionResponse) => {
             if (data.message === "Reaction added") {
                 addReaction(reaction.emoji);
             } else if (data.message === "Reaction removed") {
                 removeReaction(reaction.emoji);
             }
-        }).catch((error: any) => {
-            console.error('Failed to toggle reaction:', error);
+        }).catch(() => {
+            notification("failed to toggle reaction", "error");
         });
     };
 
-    function onReport() {
+    function onReport(): void {
         if(!user) {
             notification("you must be logged in to report a post", "error");
             return;
         }
 
-        createReport(post.ID, user ? user.ID : 0).then(() => {
+        createReport(post.ID, user != null ? user.ID : 0).then(() => {
             notification("post reported", "success");
         }).catch(() => {
             notification("failed to report post", "error");
@@ -143,7 +143,7 @@ function PostComponent({ post, search, setReplyTo }: PostComponentProps): JSX.El
                     {(search != '') &&
                     <div className="post-page__post-meta-right-container">
 
-                        <div className="post-page__post-meta-right" onClick={() => navigate(`/category/${post.category.name}/post/${post.parent_post_id}/${post.page}?goto=${post.ID}`)}>
+                        <div className="post-page__post-meta-right" onClick={() => void navigate(`/category/${post.category.name}/post/${post.parent_post_id}/${post.page}?goto=${post.ID}`)}>
                             <GoSVG />
                             <span>jump</span>
                         </div>
@@ -170,7 +170,7 @@ function PostComponent({ post, search, setReplyTo }: PostComponentProps): JSX.El
                     <Markdown remarkPlugins={[remarkGfm]} className={post.is_deleted ? 'deleted-post' : ''}>{post.content}</Markdown>
                 </div>
                 <div className="post-page__reactions">
-                    {post.reactions && post.reactions.map((reaction: any) => (
+                    {post.reactions.map((reaction: PostReactionsCount) => (
                         <ReactionComponent 
                             key={reaction.reaction.emoji} 
                             reaction={reaction.reaction} 

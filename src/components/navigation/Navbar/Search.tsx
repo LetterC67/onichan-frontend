@@ -14,7 +14,7 @@ function Search({category}: SearchProps): JSX.Element {
     const navigate = useNavigate();
     const location = useLocation();
 
-    function removeLastPageSegment(pathname: string) {
+    function removeLastPageSegment(pathname: string): string {
         const segments = pathname.split('/');
         const lastSegment = segments[segments.length - 1];
         if (!isNaN(Number(lastSegment))) {
@@ -24,18 +24,18 @@ function Search({category}: SearchProps): JSX.Element {
     }
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent): void => {
             if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
                 setVisible(false);
             }
         }
 
-        const handleEnter = (event: KeyboardEvent) => {
+        const handleEnter = (event: KeyboardEvent): void => {
             if(event.key === "Enter" && visible) {
                 if(location.pathname.includes("post")) {
-                    navigate(removeLastPageSegment(location.pathname) + `/1?search=${searchContentRef.current?.value}`);
+                    void navigate(removeLastPageSegment(location.pathname) + `/1?search=${searchContentRef.current?.value}`);
                 } else {
-                    navigate(`/category/${category?.name}?search=${searchContentRef.current?.value}`);
+                    void navigate(`/category/${category?.name}?search=${searchContentRef.current?.value}`);
                     setVisible(false);
                 }
             }
@@ -44,11 +44,11 @@ function Search({category}: SearchProps): JSX.Element {
         document.addEventListener('keydown', handleEnter);
         document.addEventListener('mousedown', handleClickOutside);
 
-        return () => {
+        return (): void => {
             document.removeEventListener('mousedown', handleClickOutside);
             document.removeEventListener('keydown', handleEnter);
         }
-    }, [visible]);
+    }, [visible, category, navigate, location.pathname]);
 
 
     return (

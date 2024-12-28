@@ -12,7 +12,7 @@ function User(): JSX.Element {
     const { logout } = useAuth();
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent): void => {
             if (ref.current && !ref.current.contains(event.target as Node)) {
                 setVisible(false);
             }
@@ -20,7 +20,7 @@ function User(): JSX.Element {
 
         document.addEventListener('mousedown', handleClickOutside);
 
-        return () => {
+        return (): void => {
             document.removeEventListener('mousedown', handleClickOutside);
         }
     }, [])
@@ -34,16 +34,16 @@ function User(): JSX.Element {
                 <div className="navbar__user-option" onClick={(event) => {
                     event.stopPropagation();
                     setVisible(false);
-                    navigate("/settings");
+                    void navigate("/settings");
                 }}>
                     <span>settings</span>
                 </div>
                 <div className="navbar__user-option" onClick={(event) => {
                     event.stopPropagation();
                     setVisible(false);
-                    logout();
                     showNotification("logged out successfully", "success");
-                    navigate("/");
+                    void logout();
+                    void navigate("/");
                 }}>
                     <span>logout</span>
                 </div>

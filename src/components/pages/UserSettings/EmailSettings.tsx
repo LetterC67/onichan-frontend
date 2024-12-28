@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { changeEmail } from "../../../api/auth";
 import { useNotification } from "../../../contexts/NotificationContext";
 import { useAuth } from "../../../contexts/AuthContext";
 import { drawRoughBorder } from "../../utils";
 import { Input } from "../../utils";
+import { ChangeEmailResponse } from "../../../interfaces";
 
 function EmailSettings(): JSX.Element {
     const [email, setEmail] = useState<string>("");
@@ -21,21 +22,7 @@ function EmailSettings(): JSX.Element {
         drawRoughBorder(emailCanvasRef);
     }, []);
 
-    useEffect(() => {
-        const handleEnter = (event: KeyboardEvent) => {
-            if (event.key === "Enter") {
-                onChangeEmail();
-            }
-        };
-
-        document.addEventListener("keydown", handleEnter);
-
-        return () => {
-            document.removeEventListener("keydown", handleEnter);
-        };
-    }, []);
-
-    function onChangeEmail() {
+    const onChangeEmail = useCallback((): void => {
         if (email === "") {
             showNotification("Please enter an email", "error");
             return;
@@ -46,18 +33,34 @@ function EmailSettings(): JSX.Element {
             return;
         }
 
-        changeEmail(password, email).then((data) => {
-            if(data.error) {
+        changeEmail(password, email).then((data: ChangeEmailResponse) => {
+            if(data.error != null) {
                 showNotification(data.error.toLowerCase(), "error");
                 return;
             } else {
                 showNotification("Email changed successfully", "success");
-                reload();
+                void reload();
             }
         }).catch(() => {
             showNotification("Failed to change email", "error");
         });
-    }
+    }, [email, password, showNotification, reload]);
+
+    useEffect(() => {
+        const handleEnter = (event: KeyboardEvent): void => {
+            if (event.key === "Enter") {
+                onChangeEmail();
+            }
+        };
+
+        document.addEventListener("keydown", handleEnter);
+
+        return (): void => {
+            document.removeEventListener("keydown", handleEnter);
+        };
+    }, [onChangeEmail]);
+
+    
 
     return (
         <div className="user-settings__tab-email">

@@ -16,7 +16,7 @@ function Navbar(): JSX.Element {
     const [scrolled, setScrolled] = useState<boolean>(false);
 
     useEffect(() => {
-		const handleScroll = () => {
+		const handleScroll = (): void => {
 			if (window.scrollY > 20) {
 				setScrolled(true);
 			} else {
@@ -25,24 +25,24 @@ function Navbar(): JSX.Element {
 		};
 
 		window.addEventListener("scroll", handleScroll);
-		return () => {
+		return (): void => {
 			window.removeEventListener("scroll", handleScroll);
 		};	
 	}, []);
 
-    function Return() {
+    function Return(): void {
         if(window.location.pathname.includes("post")) {
-            navigate(`/category/${category?.name}`);
+            void navigate(`/category/${category?.name}`);
         } else {
-            navigate("/");
+            void navigate("/");
         }
     }
 
-    function ReturnLogo() {
+    function ReturnLogo(): void {
         if(window.location.pathname.includes("category")) {
-            navigate(`/category/${category?.name}`);
+            void navigate(`/category/${category?.name}`);
         } else {
-            navigate("/");
+            void navigate("/");
         }
     }
 
@@ -72,7 +72,7 @@ function Navbar(): JSX.Element {
                         <div className="navbar__user-info">
                             <User/>
                             {category &&
-                                <div className="navbar__write" onClick={() => navigate(`/category/${category.name}/create-post`)}>
+                                <div className="navbar__write" onClick={() => void navigate(`/category/${category.name}/create-post`)}>
                                     <WriteSVG/>
                                 </div>
                             }
@@ -80,7 +80,7 @@ function Navbar(): JSX.Element {
                                 <Search category={category}/>
                             }
                             {user.role === "admin" &&
-                                <div className="navbar__report" onClick={() => navigate("/reports")}>
+                                <div className="navbar__report" onClick={() => void navigate("/reports")}>
                                     <ExclamationSVG/>
                                 </div>
                             }
@@ -89,8 +89,8 @@ function Navbar(): JSX.Element {
                     }
                     {!user &&
                         <>
-                            <a onClick={() => navigate("/login")}>login</a>
-                            <a onClick={() => navigate("/register")}>register</a>
+                            <a onClick={() => void navigate("/login")}>login</a>
+                            <a onClick={() => void navigate("/register")}>register</a>
                         </>
                     }
                 </div>

@@ -28,11 +28,11 @@ function FrontPage(): JSX.Element {
     const [categories, setCategories] = useState<CategoryType[]>([]);
 
     function toCategory(category: CategoryType): void {
-        navigate(`/category/${category.name}`);
+        void navigate(`/category/${category.name}`);
     }
 
     useEffect(() => {
-        getCategories().then((data: any) => {
+        getCategories().then((data: CategoryType[]) => {
             setCategories(data);
         }).catch((error) => {
             console.error('Failed to fetch categories:', error);

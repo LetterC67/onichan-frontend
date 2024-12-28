@@ -1,7 +1,8 @@
 import { apiClient } from "./apiClient";
 import axios from 'axios';
+import { ChangeAvatarResponse, ChangeEmailResponse, ChangePasswordResponse, LoginResponse, RegisterResponse } from "../interfaces";
 
-async function login(username: string, password: string) {
+async function login(username: string, password: string): Promise<LoginResponse> {
     try {
         const response = await apiClient.post(`/auth/login`, {
             username: username,
@@ -10,15 +11,16 @@ async function login(username: string, password: string) {
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data.error || 'Login failed';
-            return { error: errorMessage };
+            return { error: error.response.data.error };
         } else {
             return { error: 'An unexpected error occurred' };
         }
     }
 }
 
-async function register(username: string, email: string, password: string) {
+
+
+async function register(username: string, email: string, password: string): Promise<RegisterResponse> {
     try {
         const response = await apiClient.post(`/auth/register`, {
             username: username,
@@ -28,15 +30,15 @@ async function register(username: string, email: string, password: string) {
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data.error || 'Registration failed';
-            return { error: errorMessage };
+            return { error: error.response.data.error };
         } else {
             return { error: 'An unexpected error occurred' };
         }
     }
 }
 
-async function changePassword(currentPassword: string, newPassword: string) {
+
+async function changePassword(currentPassword: string, newPassword: string): Promise<ChangePasswordResponse> {
     try {
         const response = await apiClient.patch(`/auth/change-password`, {
             old_password: currentPassword,
@@ -45,15 +47,16 @@ async function changePassword(currentPassword: string, newPassword: string) {
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data.error || 'Password change failed';
-            return { error: errorMessage };
+            return { error: error.response.data.error };
         } else {
             return { error: 'An unexpected error occurred' };
         }
     }
 }
 
-async function changeEmail(currentPassword: string, newEmail: string) {
+
+
+async function changeEmail(currentPassword: string, newEmail: string): Promise<ChangeEmailResponse> {
     try {
         const response = await apiClient.patch(`/auth/change-email`, {
             password: currentPassword,
@@ -62,15 +65,14 @@ async function changeEmail(currentPassword: string, newEmail: string) {
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data.error || 'Email change failed';
-            return { error: errorMessage };
+            return { error: error.response.data.error };
         } else {
             return { error: 'An unexpected error occurred' };
         }
     }
 }
 
-async function changeAvatar(avatarURL: string) {
+async function changeAvatar(avatarURL: string): Promise<ChangeAvatarResponse> {
     try {
         const response = await apiClient.patch(`/auth/change-avatar`, {
             avatar_url: avatarURL,
@@ -78,8 +80,7 @@ async function changeAvatar(avatarURL: string) {
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data.error || 'Avatar change failed';
-            return { error: errorMessage };
+            return { error: error.response.data.error };
         } else {
             return { error: 'An unexpected error occurred' };
         }

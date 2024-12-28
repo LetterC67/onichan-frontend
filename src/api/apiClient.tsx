@@ -3,10 +3,10 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_APP_API_URL;
 
 
-function readJwtFromCookie() {
+function readJwtFromCookie(): string | null {
     const cookies = document.cookie.split("; ");
     const authorizationCookie = cookies.find(cookie => cookie.startsWith("Authorization="));
-    if (authorizationCookie) {
+    if (authorizationCookie != null) {
         const value = authorizationCookie.split("=")[1];
         if (value.startsWith("Bearer ")) {
             return value.slice(7);
@@ -30,7 +30,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
     config => {
         const token = getToken();
-        if (token) {
+        if (token != null) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
         return config;

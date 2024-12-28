@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Avatar } from '../../../interfaces';
+import { Avatar, ChangeAvatarResponse } from '../../../interfaces';
 import { getAllAvatars } from '../../../api/user';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNotification } from '../../../contexts/NotificationContext';
@@ -18,13 +18,13 @@ function PfpSettings(): JSX.Element {
         });
     }, []);
 
-    function onChangeAvatar(avatarURL: string) {
-        changeAvatar(avatarURL).then((data: any) => {
-            if(data.error) {
+    function onChangeAvatar(avatarURL: string): void {
+        changeAvatar(avatarURL).then((data: ChangeAvatarResponse) => {
+            if(data.error != null) {
                 showNotification(data.error.toLowerCase(), "error");
             } else {
                 showNotification("Avatar changed successfully", "success");
-                reload();
+                void reload();
             }
         }).catch(() => {
             showNotification("Failed to change avatar", "error");

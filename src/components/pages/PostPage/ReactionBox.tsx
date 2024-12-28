@@ -12,7 +12,7 @@ function ReactionBox({ post, toggleReaction }: ReactionBoxProps): JSX.Element {
     const reactionBoxRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent): void => {
             if (reactionBoxRef.current && !reactionBoxRef.current.contains(event.target as Node)) {
                 setVisible(false);
             }
@@ -20,7 +20,7 @@ function ReactionBox({ post, toggleReaction }: ReactionBoxProps): JSX.Element {
 
         document.addEventListener('mousedown', handleClickOutside);
 
-        return () => {
+        return (): void => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
@@ -30,7 +30,7 @@ function ReactionBox({ post, toggleReaction }: ReactionBoxProps): JSX.Element {
             <SmileSVG />
             <span>reaction</span>
             <div className={`post-page__reaction-box ${visible ? 'visible' : ''}`} ref={reactionBoxRef}>
-                {post.reactions && post.reactions.map((reaction: PostReactionsCount) => (
+                {post.reactions != null && post.reactions.map((reaction: PostReactionsCount) => (
                     <div className="post-page__add-reaction" key={reaction.reaction.ID}
                         onClick={() => toggleReaction(reaction.reaction)}
                     >

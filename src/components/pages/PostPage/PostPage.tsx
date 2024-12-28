@@ -9,7 +9,7 @@ import { SearchSVG, ChickenSVG, UserSVG, TimeSVG } from "../../svg";
 import useWebSocket from "react-use-websocket";
 import { useCategory } from "../../../contexts/CategoryContext";
 import Loading from "../../Loading";
-import { Post } from "../../../interfaces";
+import { GetPostResponse, Post, SearchResponse } from "../../../interfaces";
 
 import PostComponent from "./PostComponent";
 import ReplyBox from "./ReplyBox";
@@ -33,12 +33,12 @@ function PostPage(): JSX.Element {
     const { category } = useCategory();
     const notification = useNotification();
 
-    const goto:string = searchParams.get('goto') || '';
-    const search:string = searchParams.get('search') || '';
+    const goto:string = searchParams.get('goto') ?? '';
+    const search:string = searchParams.get('search') ?? '';
 
     const shouldGoto = useRef<boolean>(true);
     
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket<{ type: string, data: any }>(WS_URL + "/ws?token=" + jwt, {
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket<{ type: string, data: Record<string, unknown> }>(WS_URL + "/ws?token=" + jwt, {
         share: true,
         shouldReconnect: () => true,
     });
@@ -47,15 +47,15 @@ function PostPage(): JSX.Element {
         if (readyState === WebSocket.OPEN) {
             sendJsonMessage({ type: "post", data: id});
         }
-    }, [readyState]);
+    }, [readyState, id, sendJsonMessage]);
 
     useEffect(() => {
-        if(lastJsonMessage) {
+        if(lastJsonMessage !== null && lastJsonMessage !== undefined) {
             if (lastJsonMessage?.type == "post") {
-                getPost(id, user ? user.ID.toString() : '0', page).then((data: any) => {
-                    setPosts(data.posts);
-                    setMasterPost(data.master_post);
-                    setMaxPages(parseInt(data.total_pages));
+                getPost(id, user ? user.ID.toString() : '0', page).then((data: GetPostResponse) => {
+                    setPosts(data.posts ?? []);
+                    setMasterPost(data.master_post ?? {} as Post);
+                    setMaxPages(data.total_pages ?? 1);
                 }).catch((error) => {
                     console.error('Failed to fetch posts:', error);
                 });
@@ -64,7 +64,7 @@ function PostPage(): JSX.Element {
         }
 
         console.log(`Got a new message: ${JSON.stringify(lastJsonMessage)}`);
-    }, [lastJsonMessage])
+    }, [lastJsonMessage, id, page, user]);
 
     useEffect(() => {
         if(goto != '') {
@@ -82,19 +82,19 @@ function PostPage(): JSX.Element {
             if(user) {
                 userID = user.ID;
             }
-            getPost(id, userID.toString(), page).then((data: any) => {
-                setPosts(data.posts);
-                setMasterPost(data.master_post);
-                setMaxPages(parseInt(data.total_pages));
+            getPost(id, userID.toString(), page).then((data: GetPostResponse) => {
+                setPosts(data.posts ?? []);
+                setMasterPost(data.master_post ?? {} as Post);
+                setMaxPages(data.total_pages ?? 1);
             }).catch((error) => {
                 console.error('Failed to fetch posts:', error);
                 setPosts(null);
                 notification("Failed to fetch posts", "error");
             });
         } else {
-            searchContent(page, search, id).then((data: any) => {
-                setPosts(data.posts);
-                setMaxPages(parseInt(data.total_pages));
+            searchContent(page, search, id).then((data: SearchResponse) => {
+                setPosts(data.posts ?? []);
+                setMaxPages(data.total_pages ?? 1);
             }).catch((error) => {
                 console.error('Failed to fetch posts:', error);
                 setPosts(null);
@@ -102,10 +102,10 @@ function PostPage(): JSX.Element {
             });
         }
         
-    }, [page, goto, search, user]);
+    }, [page, goto, search, user, id, notification]);
 
-    function onPageChange(page: string | number) {
-        navigate(`/category/${category?.name}/post/${id}/${page}`);
+    function onPageChange(page: string | number): void {
+        void navigate(`/category/${category?.name}/post/${id}/${page}`);
     }
 
     return (
@@ -120,7 +120,7 @@ function PostPage(): JSX.Element {
                 </div>
                 {search == '' && <div className="post-page__master-post">
                     <div className={`post-page__master-post-title ${masterPost?.is_deleted ? 'deleted-post' : ''}`}>
-                        {masterPost && masterPost.title}
+                        {masterPost?.title}
                     </div>
                     <div className="post-page__master-post-meta">
                         <div className="post-page__master-post-username">
@@ -132,7 +132,7 @@ function PostPage(): JSX.Element {
                         <div className="post-page__master-post-time">
                             <TimeSVG />
                             <span>
-                                {masterPost && new Date(masterPost.created_at).toLocaleString('en-US', {
+                                {(masterPost != undefined && masterPost != null) && new Date(masterPost.created_at).toLocaleString('en-US', {
                                     year: 'numeric',
                                     month: 'short',
                                     day: 'numeric',
@@ -160,7 +160,7 @@ function PostPage(): JSX.Element {
                     }
                     <table>
                         <tbody>
-                            {posts && posts.map((post) => (
+                            {posts?.map((post) => (
                                 <PostComponent search={search} setReplyTo={setReplyTo} key={post.ID} post={post} />
                             ))}
                             {(user && search == '') &&
@@ -170,7 +170,7 @@ function PostPage(): JSX.Element {
                         </tbody>
                     </table>
                     {(!user && search == '') &&
-                        <div className="post-page__please-login" onClick={() => navigate("/login")}>
+                        <div className="post-page__please-login" onClick={() => void navigate("/login")}>
                             <span>
                                 please login to post  
                             </span>
@@ -185,7 +185,7 @@ function PostPage(): JSX.Element {
             {(posts == null) &&
                 <Loading />
             }
-            {maxPages > 1 && <PaginationBar maxPages={maxPages} currentPage={page} onPageChange={onPageChange} />}
+            {maxPages > 1 && <PaginationBar maxPages={maxPages} currentPage={parseInt(page)} onPageChange={onPageChange} />}
         </>
     )
 }

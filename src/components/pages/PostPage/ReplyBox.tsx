@@ -1,4 +1,4 @@
-import { Post } from "../../../interfaces";
+import { CreatePostResponse, Post, UploadResponse, User } from "../../../interfaces";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Markdown from 'react-markdown'
@@ -13,7 +13,7 @@ import { GoUpSVG, CancelSVG, EyeSVG, EditSVG, Tick2SVG } from "../../svg";
 import { scrollToBottom, scrollPostIntoView } from "../../utils";
 
 interface ReplyBoxProps {
-    user: any;
+    user: User;
     replyTo: Post | null;
     masterPost: Post;
     setReplyTo: (post: Post | null) => void;
@@ -26,7 +26,8 @@ function ReplyBox({ user, replyTo, masterPost, setReplyTo }: ReplyBoxProps): JSX
     const [startedEditing, setStartedEditing] = useState<boolean>(false);
     const navigate = useNavigate();
     const { category } = useCategory();
-
+    const notification  = useNotification();
+    
     useEffect(() => {
         if(startedEditing) {
             textareaRef.current?.focus();
@@ -34,22 +35,23 @@ function ReplyBox({ user, replyTo, masterPost, setReplyTo }: ReplyBoxProps): JSX
         if (textareaRef.current) {
             autosize(textareaRef.current);
         }
-    }, [isEditing]);
+    }, [isEditing, startedEditing]);
     
     useEffect(() => {
         if(!startedEditing) {
             return;
         }
         scrollToBottom();
-    }, [isEditing, textareaRef.current?.style.height]);
+    }, [isEditing, textareaRef.current?.style.height, startedEditing]);
 
 
     useEffect(() => {
-        const handlePaste = (event: any) => {
-            const clipboardItems = event.clipboardData.items;
+        const handlePaste = (event: ClipboardEvent): void => {
+            const clipboardItems = event.clipboardData?.items;
             let imageFound = false;
             let file = null;
-        
+            
+            if (!clipboardItems) return;
             for (const item of clipboardItems) {
                 if (item.type.startsWith("image/")) {
                     file = item.getAsFile();
@@ -61,7 +63,8 @@ function ReplyBox({ user, replyTo, masterPost, setReplyTo }: ReplyBoxProps): JSX
         
             if (imageFound) {
                 event.preventDefault();
-                upload(file).then((data: any) => {
+                if (!file) return;
+                upload(file).then((data: UploadResponse) => {
                     setTextareaValue(textareaValue + `![image](${API_URL + "/" + data.path})`);
                     notification("image uploaded successfully", "success");
                 }).catch((error) => {
@@ -71,25 +74,25 @@ function ReplyBox({ user, replyTo, masterPost, setReplyTo }: ReplyBoxProps): JSX
             }
         };
 
-        textareaRef.current?.addEventListener("paste", handlePaste);
+        const textarea = textareaRef.current;
+        textarea?.addEventListener("paste", handlePaste);
 
-        return () => {
-            textareaRef.current?.removeEventListener("paste", handlePaste);
+        return (): void => {
+            textarea?.removeEventListener("paste", handlePaste);
         };
-    }, []);
+    }, [notification, textareaValue]);
 
-    const notification  = useNotification();
 
-    function postComment() {
+    function postComment(): void {
         if (!textareaValue) {
             return;
         }
 
-        comment(replyTo?.ID ?? null, masterPost.ID, masterPost.category.ID, textareaValue).then((data: any) => {
+        comment(replyTo?.ID ?? null, masterPost.ID, masterPost.category.ID, textareaValue).then((data: CreatePostResponse) => {
             setTextareaValue("");
             setIsEditing(true);
             setReplyTo(null);
-            navigate(`/category/${category?.name}/post/${masterPost.ID}/${data.page}?goto=${data.id}`);
+            void navigate(`/category/${category?.name}/post/${masterPost.ID}/${data.page}?goto=${data.id}`);
             notification('comment posted successfully', 'success');
         }).catch((error) => {
             console.error('Failed to post comment:', error);

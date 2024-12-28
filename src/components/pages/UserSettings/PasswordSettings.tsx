@@ -1,7 +1,7 @@
 import { drawRoughBorder } from "../../utils";
 import { Input } from "../../utils";
 import { changePassword } from "../../../api/auth";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNotification } from "../../../contexts/NotificationContext";
 
 function PasswordSettings(): JSX.Element {
@@ -15,27 +15,7 @@ function PasswordSettings(): JSX.Element {
     const passwordCanvasRef = useRef<HTMLCanvasElement>(null);
     const confirmPasswordCanvasRef = useRef<HTMLCanvasElement>(null);
 
-    useEffect (() => {
-        drawRoughBorder(currentPasswordCanvasRef);
-        drawRoughBorder(passwordCanvasRef);
-        drawRoughBorder(confirmPasswordCanvasRef);
-    }, []);
-
-    useEffect(() => {
-        const handleEnter = (event: KeyboardEvent) => {
-            if (event.key === "Enter") {
-                onChangePassword();
-            }
-        };
-
-        document.addEventListener("keydown", handleEnter);
-
-        return () => {
-            document.removeEventListener("keydown", handleEnter);
-        };
-    }, []);
-
-    function onChangePassword() {
+    const onChangePassword = useCallback((): void => {
         if (password !== confirmPassword) {
             showNotification("Passwords do not match", "error");
             return;
@@ -47,7 +27,7 @@ function PasswordSettings(): JSX.Element {
         }
 
         changePassword(currentPassword, password).then((data) => {
-            if(data.error) {
+            if(data.error != null) {
                 showNotification(data.error.toLowerCase(), "error");
                 return;
             } else {
@@ -56,7 +36,27 @@ function PasswordSettings(): JSX.Element {
         }).catch(() => {
             showNotification("Failed to change password", "error");
         });
-    }
+    }, [currentPassword, password, confirmPassword, showNotification]);
+
+    useEffect (() => {
+        drawRoughBorder(currentPasswordCanvasRef);
+        drawRoughBorder(passwordCanvasRef);
+        drawRoughBorder(confirmPasswordCanvasRef);
+    }, []);
+
+    useEffect(() => {
+        const handleEnter = (event: KeyboardEvent): void => {
+            if (event.key === "Enter") {
+                onChangePassword();
+            }
+        };
+
+        document.addEventListener("keydown", handleEnter);
+
+        return (): void => {
+            document.removeEventListener("keydown", handleEnter);
+        };
+    }, [onChangePassword]);
 
     return (
         <div className="user-settings__password">

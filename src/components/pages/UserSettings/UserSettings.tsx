@@ -5,7 +5,7 @@ import PasswordSettings from "./PasswordSettings";
 import EmailSettings from "./EmailSettings";
 import PfpSettings from "./PfpSettings";
 
-function UserSettings() {
+function UserSettings(): JSX.Element {
     const { user } = useAuth();
     const [tab, setTab] = useState<string>("password");
 
@@ -15,7 +15,7 @@ function UserSettings() {
         "pfp"
     ]
 
-    function Header() {
+    function Header(): JSX.Element {
         return (
             <div className="user-settings__header">
                 <div className="user-settings__user">
