@@ -12,6 +12,8 @@ the web forum is fully functional equiped with essential features:
 - notification system
 - support for reporting inapproriate posts / admins can remove them
 
+currently, the frontend is optimized for pc only.
+
 ## installation
 
 clone the repo:
@@ -26,6 +28,8 @@ npm i
 ```
 
 ## run
+don't forget to setup the backend before running. edit the configs in `.env` file.
+
 run dev server:
 ```sh
 npm run dev
