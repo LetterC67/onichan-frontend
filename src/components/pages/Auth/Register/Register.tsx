@@ -78,7 +78,7 @@ function Register(): JSX.Element {
                 <img src={LoginSVG} alt="login" style={{width: "100%", height: "4rem"}}/>
             </div>
             
-                <Input canvasRef={usernameCanvasRef} value={username} setValue={setUsername} placeholder="username"></Input>
+                <Input type="text" canvasRef={usernameCanvasRef} value={username} setValue={setUsername} placeholder="username"></Input>
 
                 <Input type="email" canvasRef={emailCanvasRef} value={email} setValue={setEmail} placeholder="email"></Input>
 

@@ -35,7 +35,7 @@ function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
         const cookieValue = `Bearer ${jwt}`;
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 120);
-        document.cookie = `Authorization=${cookieValue}; path=/; expires=${expirationDate.toUTCString()}; SameSite=None; Secure`;
+        document.cookie = `Authorization=${cookieValue}; path=/; expires=${expirationDate.toUTCString()}`;
     }
 
     function readJwtFromCookie(): string | null {
