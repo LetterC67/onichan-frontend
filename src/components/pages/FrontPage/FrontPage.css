@@ -49,23 +49,30 @@
     /* box-shadow: 0 4px 15px rgba(0,0,0,0.1); */
 }
 
-@media (min-width: 1200px) {
-	.front-page {
-		width: 768px;
-		margin: 0 auto;
-	}	
+@media (min-width: 320px) {
+    .front-page {
+        width: 95%;
+        margin: 0 auto;
+    }	
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1200px) {
 	.front-page {
 		width: 1000px;
 		margin: 0 auto;
 	}	
 }
 
+@media (min-width: 1440px) {
+	.front-page {
+		width: 65%;
+		margin: 0 auto;
+	}	
+}
+
 @media (min-width: 1920px) {
 	.front-page {
-		width: 1200px; 
+		width: 65%; 
 		margin: 0 auto; 
 	}
 }

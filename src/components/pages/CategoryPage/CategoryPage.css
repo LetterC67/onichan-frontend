@@ -73,25 +73,30 @@
     color: var(--hover-color); 
 }
 
-
+@media (min-width: 320px) {
+    .category-page {
+        width: 95%;
+        margin: 0 auto;
+    }	
+}
 
 @media (min-width: 1200px) {
     .category-page  {
-        width: 600px;
+        width: 800px;
 		margin: 0 auto;
 	}	
 }
 
 @media (min-width: 1440px) {
 	.category-page  {
-		width: 800px;
+		width: 55%;
 		margin: 0 auto;
 	}	
 }
 
 @media (min-width: 1920px) {
 	.category-page  {
-		width: 1100px; 
+		width: 55%; 
 		margin: 0 auto; 
 	}
 }

@@ -24,6 +24,7 @@
     --font-size-small: 1.5rem;
     --font-size-medium: 2rem;
     --font-size-large: 3rem;
+    --font-size-category: clamp(2rem, 1.6vw, 2rem);
     --hover-color: #555555;
     
     --background-hover-color: #eeeeee;

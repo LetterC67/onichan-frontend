@@ -39,33 +39,40 @@
     line-height: var(--font-size-small);
 }
 
-@media (min-width: 1200px) {
-	.navbar__content {
-		width: 768px;
-		margin: 0 auto;
-	}	
+@media (min-width: 320px) {
+    .navbar__content {
+        width: 95%;
+        margin: 0 auto;
+    }	
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1200px) {
 	.navbar__content {
 		width: 1000px;
 		margin: 0 auto;
 	}	
 }
 
+@media (min-width: 1440px) {
+	.navbar__content {
+		width: 65%;
+		margin: 0 auto;
+	}	
+}
+
 @media (min-width: 1920px) {
 	.navbar__content {
-		width: 1200px; 
+		width: 65%; 
 		margin: 0 auto; 
 	}
 }
 
 .navbar__start-logo {
-    font-size: 3rem;
+    font-size: var(--font-size-large);
 }
 
 .navbar__end {
-    font-size: 1.5rem;
+    font-size: var(--font-size-small);
     gap: 2rem;
     display: flex;
     flex-direction: row;

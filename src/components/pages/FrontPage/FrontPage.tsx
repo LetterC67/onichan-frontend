@@ -32,6 +32,56 @@ function FrontPage(): JSX.Element {
     }
 
     useEffect(() => {
+        function getOptimalFontSize(element: HTMLDivElement, minFont: number = 10, maxFont: number = 100): number {
+            const container = element.parentElement;
+            let low = minFont;
+            let high = maxFont;
+            let optimalFontSize = minFont;
+      
+            while (low <= high) {
+                const mid = Math.floor((low + high) / 2);
+                element.style.fontSize = `${mid}px`;
+        
+                const isOverflowing = container && (element.scrollWidth > container.clientWidth || element.scrollHeight > container.clientHeight);
+      
+                if (isOverflowing == false) {
+                    optimalFontSize = mid;
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+      
+            return optimalFontSize;
+        }
+        
+        function applyFontSize(className: string, minFont = 10, maxFont = 100): void {
+            const elements: NodeListOf<HTMLDivElement> = document.querySelectorAll(`.${className}`);
+            let smallestFontSize = maxFont;
+      
+            elements.forEach(el => {
+                const requiredFontSize = getOptimalFontSize(el, minFont, maxFont);
+                if (requiredFontSize < smallestFontSize) {
+                    smallestFontSize = requiredFontSize;
+                }
+            });
+            
+            elements.forEach(el => {
+                console.log(el);
+                el.style.fontSize = `${smallestFontSize}px`;
+            });
+        }
+      
+        window.addEventListener('load', () => {
+            applyFontSize('category__title');
+        });
+    
+        window.addEventListener('resize', () => {
+            applyFontSize('category__title');
+        });
+    }, []);
+
+    useEffect(() => {
         getCategories().then((data: CategoryType[]) => {
             setCategories(data);
         }).catch((error) => {
