@@ -50,7 +50,7 @@ build the docker image:
 
 run the docker container:
   ```sh
-  docker run -p 80:80 onichan-frontend
+  docker run -p 80:80 -d onichan-frontend
   ```
 
 the application will be available at `http://localhost`, or whatever port you desire.

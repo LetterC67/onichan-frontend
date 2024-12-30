@@ -112,6 +112,10 @@
     .navbar__user-info {
         gap: 0.75rem !important;
     }
+
+    .navbar__user-options {
+        right: 0 !important;
+    }
 }
 
 .navbar__start-logo {
