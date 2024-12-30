@@ -58,28 +58,48 @@ function FrontPage(): JSX.Element {
         function applyFontSize(className: string, minFont = 10, maxFont = 100): void {
             const elements: NodeListOf<HTMLDivElement> = document.querySelectorAll(`.${className}`);
             let smallestFontSize = maxFont;
-      
+
+            // select the element with smallest scroll width currently
+            let element: HTMLDivElement = elements[0];
             elements.forEach(el => {
-                const requiredFontSize = getOptimalFontSize(el, minFont, maxFont);
-                if (requiredFontSize < smallestFontSize) {
-                    smallestFontSize = requiredFontSize;
+                if (el.scrollWidth > element.scrollWidth) {
+                    element = el;
                 }
             });
-            
+
+            smallestFontSize = getOptimalFontSize(element, minFont, maxFont);
+
             elements.forEach(el => {
-                console.log(el);
                 el.style.fontSize = `${smallestFontSize}px`;
             });
         }
       
-        window.addEventListener('load', () => {
-            applyFontSize('category__title');
-        });
+        if(document.readyState === 'complete') {
+            try {
+                applyFontSize('category__title');
+            } catch {
+                console.error('Failed to apply font size');
+            }
+        } else {
+            window.addEventListener('DOMContentLoaded', () => {
+                applyFontSize('category__title');
+            });
+        }
     
         window.addEventListener('resize', () => {
             applyFontSize('category__title');
         });
-    }, []);
+
+        return (): void => {
+            window.removeEventListener('DOMContentLoaded', () => {
+                applyFontSize('category__title');
+            });
+        
+            window.removeEventListener('resize', () => {
+                applyFontSize('category__title');
+            });
+        }
+    }, [categories]);
 
     useEffect(() => {
         getCategories().then((data: CategoryType[]) => {

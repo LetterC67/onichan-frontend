@@ -63,17 +63,11 @@ function CategoryPage(): JSX.Element {
                                 <span>nobody here but us chickens</span>
                             </div>
                         }
-                        <table>
-                            <colgroup>
-                                <col/>
-                                <col/>
-                            </colgroup>
-                            <tbody>
                             {posts?.map((post) => (
-                                <tr key={post.ID} className="category-post" onClick={() => {
+                                <div key={post.ID} className="category-post" onClick={() => {
                                     void navigate(`/category/${id}/post/${post.ID}`);
                                 }}>
-                                    <td className="category-post__left">
+                                    <div className="category-post__left">
                                         <div className="category-post__avatar">
                                             <img src={post.user.avatar_url} alt="avatar" />
                                         </div>
@@ -85,27 +79,27 @@ function CategoryPage(): JSX.Element {
                                                 {post.user.username}
                                             </p>
                                         </div>
-                                    </td>
-                                    <td className="category-post__meta">
-                                        <div className="category-post__date">
-                                        {new Date(post.last_updated).toLocaleString('en-US', {
-                                            year: 'numeric',
-                                            month: 'short',
-                                            day: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                            second: '2-digit',
-                                            hour12: false
-                                        })}
+                                    </div>
+                                    <div className="category-post__meta">
+                                        <div className="category-placeholder">
                                         </div>
-                                        <div>
+                                        <div className="category-post__date">
+                                            {new Date(post.last_updated).toLocaleString('en-US', {
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                second: '2-digit',
+                                                hour12: false
+                                            })}
+                                        </div>
+                                        <div className="category-post__reply-count">
                                             {post.replies} replies
                                         </div>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
                             ))}
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             }

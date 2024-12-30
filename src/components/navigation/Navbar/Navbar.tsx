@@ -60,9 +60,9 @@ function Navbar(): JSX.Element {
                                 }
                             </span>
                             <div className="navbar__logo-content" onClick={ReturnLogo   }>
-                                <span>onichan</span>
+                                <span className="navbar__onichan">onichan</span>
                                 {category && <img src={category.image_url} alt="category"/>}
-                                {category && <span>{category.name}</span>}
+                                {category && <span className="navbar__category-name">{category.name}</span>}
                             </div>
                         </div>
                     </div>

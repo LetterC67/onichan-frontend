@@ -29,18 +29,29 @@ function ReportComponent({ report }: ReportComponentProps): JSX.Element {
     }
 
     return (
-        <tr className="post-page__post" id={`post-${post.ID}`} >
-            <td className="post-page__post-meta">
+        <div className="post-page__post" id={`post-${post.ID}`} >
+            <div className="post-page__post-meta">
                 <div className="post-page__post-avatar">
                     <img src={post.user.avatar_url} alt="avatar"/>
                 </div>
                 <span>
                     {post.user.username}
+                    <div className="post-page__post-posted-at-mobile">
+                        {new Date(post.created_at).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: false
+                        })}
+                    </div>
                 </span>
-            </td>
-            <td className="post-page__post-content">
+            </div>
+            <div className="post-page__post-content">
                 <div className="post-page__post-content-meta">
-                    <div>
+                    <div className="post-page__post-posted-at">
                         {new Date(post.created_at).toLocaleString('en-US', {
                             year: 'numeric',
                             month: 'short',
@@ -75,8 +86,8 @@ function ReportComponent({ report }: ReportComponentProps): JSX.Element {
                 <div className="post-page__markdown-content">
                     <Markdown remarkPlugins={[remarkGfm]} className={post.is_deleted ? 'deleted-post' : ''}>{post.content}</Markdown>
                 </div>
-            </td>
-        </tr>       
+            </div>
+        </div>       
     )
 }
 

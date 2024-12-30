@@ -39,19 +39,11 @@
     line-height: var(--font-size-small);
 }
 
-@media (min-width: 320px) {
-    .navbar__content {
-        width: 95%;
-        margin: 0 auto;
-    }	
-}
+.navbar__content {
+    width: 95%;
+    margin: 0 auto;
+}	
 
-@media (min-width: 1200px) {
-	.navbar__content {
-		width: 1000px;
-		margin: 0 auto;
-	}	
-}
 
 @media (min-width: 1440px) {
 	.navbar__content {
@@ -65,6 +57,65 @@
 		width: 65%; 
 		margin: 0 auto; 
 	}
+}
+
+@media (max-width: 768px) {
+    .navbar__username {
+        display: none;
+    }
+
+    .navbar svg {
+        width: 1.25rem !important;
+        height: 1.25rem !important;
+    }
+
+    .navbar img {
+        width: 1.25rem !important;
+        height: 1.25rem !important;
+    }
+
+    .navbar__logo-content {
+        font-size: var(--font-size-medium) !important;
+    }
+
+    .navbar__category-name {
+        display: none;
+    }
+
+    .navbar__start {
+        margin-bottom: -0.5rem;
+    }
+
+    .navbar__onichan {
+        line-height: 1rem;
+    }
+
+    .navbar__search {
+        position: fixed !important;
+        width: 90vw;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .navbar__start-return svg {
+        position: absolute;
+        height: 1rem !important;
+        width: 1rem !important;
+        left: 8rem !important;
+        top: 0.5rem !important;
+        
+        fill: var(--secondary-color);
+        transition: fill 0.3s ease;
+        
+    }
+
+    .navbar__user-info {
+        gap: 0.75rem !important;
+    }
+
+    .navbar__user-options {
+        right: 0 !important;
+    }
 }
 
 .navbar__start-logo {
@@ -205,8 +256,8 @@
 }
 
 .navbar__no-notification svg{
-    width: 5rem;
-    height: 5rem;
+    width: 5rem !important;
+    height: 5rem !important;
 }
 
 .navbar__no-notification path {
@@ -234,7 +285,7 @@
     visibility: hidden;
     transition: visibility 0.3s ease, opacity 0.3s ease;
     width: 25rem;
-    right: 3rem;
+    right: 0;
 }
 
 .navbar__search.visible {
@@ -273,6 +324,7 @@
     z-index: 100000;
     opacity: 0;
     max-height: 75vh;
+    right: 5rem;
 
     padding: 0.5rem;
     padding-right: 0;

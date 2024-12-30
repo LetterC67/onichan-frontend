@@ -100,16 +100,31 @@ function ReplyBox({ user, replyTo, masterPost, setReplyTo }: ReplyBoxProps): JSX
     }
 
     return (
-        <tr className="post-page__post">
-            <td className="post-page__post-meta">
+        <div className="post-page__post">
+            <div className="post-page__post-meta">
                 <div className="post-page__post-avatar">
                     <img src={user?.avatar_url} alt="avatar"/>
                 </div>
                 <span>
                     {user?.username}
+                    <span className="post-page__reply-go-up-mobile" style={{display: 'flex', flexDirection:'row', gap:'0.5rem'}}>
+                        <span>{'replying to '}</span>
+                        {replyTo  && 
+                            <>
+                                <span>{replyTo.user.username + ' '}</span>
+                                <span className="post-page__reply-icon" onClick={() => scrollPostIntoView(replyTo.ID)}>
+                                    <GoUpSVG />
+                                </span>
+                                <span className="post-page__reply-icon" onClick={() => setReplyTo(null)}>
+                                    <CancelSVG />
+                                </span>
+                            </>
+                        }
+                        {!replyTo && <span>{'[master post]'}</span>}
+                    </span>    
                 </span>
-            </td>
-            <td className="post-page__reply">
+            </div>
+            <div className="post-page__reply">
                 <div className="post-page__post-content-meta">
                     <span className="post-page__reply-go-up" style={{display: 'flex', flexDirection:'row', gap:'0.5rem'}}>
                         <span>{'replying to '}</span>
@@ -155,8 +170,8 @@ function ReplyBox({ user, replyTo, masterPost, setReplyTo }: ReplyBoxProps): JSX
                 {!isEditing &&
                     <Markdown remarkPlugins={[remarkGfm]}>{textareaValue}</Markdown>
                 }
-            </td>
-        </tr>     
+            </div>
+        </div>     
     )
 }
 

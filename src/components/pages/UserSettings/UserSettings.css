@@ -1,19 +1,9 @@
-@media (min-width: 320px) {
-    .user-settings  {
-        width: 95%;
-        margin: 0 auto;
-    }	
+.user-settings  {
+    width: 95%;
+    margin: 0 auto;
 }
 
 @media (min-width: 1200px) {
-    .user-settings  {
-        width: 800px;
-		margin: 0 auto;
-        margin-top: 1rem;
-	}	
-}
-
-@media (min-width: 1440px) {
 	.user-settings  {
 		width: 55%;
 		margin: 0 auto;
@@ -27,6 +17,24 @@
 		margin: 0 auto; 
         margin-top: 1rem;
 	}
+}
+
+@media (max-width: 768px) {
+    .user-settings__user-avatar img {
+        width: 4rem !important;
+        height: 4rem !important;
+    }
+    
+    .user-settings__user {
+        gap: 1rem !important;
+    }
+
+    .user-settings__tab-options {
+        gap: 2rem !important;
+        font-size: var(--font-size-small) !important;
+        width: 90vw !important;
+    }
+
 }
 
 .user-settings {
@@ -99,6 +107,7 @@
 }
 
 .user-settings__tab-options {
+    max-width: 95vw;
     position: fixed;
     bottom: 0;
     display: flex;
@@ -107,6 +116,12 @@
     gap: 5rem;
     font-size: var(--font-size-medium);
     margin: 3rem;
+    background-color: #ffffffdd;
+    padding: 0.75rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .user-settings__tab-option {
@@ -151,6 +166,7 @@
 
 .user-settings__pfps {
     width: 50rem;
+    max-width: 95vw;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

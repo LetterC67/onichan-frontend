@@ -1,13 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
 
+/* * {
+	outline: 1px solid red;
+  } */
+
+  *, 
+*::before, 
+*::after {
+  box-sizing: border-box;
+}
 :root {
     font-family: Jua;
     line-height: 1.5;
     font-weight: 400;
 
     color-scheme: light dark;
-    /* color: rgba(255, 255, 255, 0.87); */
-    /* background-color: #242424; */
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -17,8 +24,8 @@
     --color-background: #f9f9f8;
     --primary-color: #000000;
     --secondary-color: #8f8f8f;
-    --tertiary-color: #ff6f61; /* Vibrant coral */
-    --quaternary-color: #5a8f7b; /* Calm green */
+    --tertiary-color: #ff6f61;
+    --quaternary-color: #5a8f7b; 
     --font-size-xx-small: 1rem;
     --font-size-x-small: 1.25rem;
     --font-size-small: 1.5rem;
@@ -34,7 +41,18 @@
     --dark-color: #512da8;
     --secondary-color-background: #eaf8e6;
     --test-color: #d8f3dca1;
+
   }
+  
+  @media (max-width: 768px) {
+    :root {
+		--font-size-xx-small: 0.75rem;
+		--font-size-x-small: 1rem;
+		--font-size-small: 1.25rem;
+		--font-size-medium: 1.5rem;
+		--font-size-large: 2rem;
+  }
+}
 
 body {
 	background-color: var(--color-background);

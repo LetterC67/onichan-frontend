@@ -28,7 +28,7 @@ function User(): JSX.Element {
     return (
         <div className="navbar__user-infos" onClick={() => setVisible(true)}>
             <img src={user?.avatar_url} alt="avatar"/>
-            <span>{user?.username}</span>
+            <span className="navbar__username">{user?.username}</span>
 
             <div ref={ref} className={`navbar__user-options ${visible ? 'visible' : ''}`}>
                 <div className="navbar__user-option" onClick={(event) => {

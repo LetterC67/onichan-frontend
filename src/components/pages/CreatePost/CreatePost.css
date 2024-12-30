@@ -1,19 +1,11 @@
-@media (min-width: 320px) {
-    .create-post-page {
-        width: 95%;
-        margin: 0 auto;
-    }	
-}
+
+.create-post-page {
+    width: 95%;
+    margin: 0 auto;
+}	
+
 
 @media (min-width: 1200px) {
-    .create-post-page  {
-        width: 800px;
-		margin: 0 auto;
-        margin-top: 1rem;
-	}	
-}
-
-@media (min-width: 1440px) {
 	.create-post-page  {
 		width: 55%;
 		margin: 0 auto;
