@@ -83,6 +83,7 @@
     /* color: var(--tertiary-color); */
     color: #B22222 ;
     background-color: #FFD2D2 ;
+    margin-top: 5rem;
 }
 
 .post-page__please-login:hover {
