@@ -67,6 +67,34 @@
 	}
 }
 
+@media (max-width: 768px) {
+    .navbar__username {
+        display: none;
+    }
+
+    .navbar svg {
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+    }
+
+    .navbar img {
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+    }
+
+    .navbar__logo-content {
+        font-size: var(--font-size-medium) !important;
+    }
+
+    .navbar__category-name {
+        display: none;
+    }
+
+    .navbar__start {
+        margin-bottom: -0.5rem;
+    }
+}
+
 .navbar__start-logo {
     font-size: var(--font-size-large);
 }

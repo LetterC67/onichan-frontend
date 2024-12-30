@@ -158,17 +158,14 @@ function PostPage(): JSX.Element {
                             <span>nobody here but us chickens</span>
                         </div>
                     }
-                    <table>
-                        <tbody>
-                            {posts?.map((post) => (
-                                <PostComponent search={search} setReplyTo={setReplyTo} key={post.ID} post={post} />
-                            ))}
-                            {(user && search == '') &&
-                            <ReplyBox masterPost={masterPost} replyTo={replyTo} setReplyTo={setReplyTo} user={user}></ReplyBox>
-                            }
+                    
+                    {posts?.map((post) => (
+                        <PostComponent search={search} setReplyTo={setReplyTo} key={post.ID} post={post} />
+                    ))}
+                    {(user && search == '') &&
+                    <ReplyBox masterPost={masterPost} replyTo={replyTo} setReplyTo={setReplyTo} user={user}></ReplyBox>
+                    }
 
-                        </tbody>
-                    </table>
                     {(!user && search == '') &&
                         <div className="post-page__please-login" onClick={() => void navigate("/login")}>
                             <span>

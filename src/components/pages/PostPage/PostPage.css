@@ -31,6 +31,7 @@
 
 .post-page {
     color: var(--primary-color);
+    font-size: var(--font-size-small);
 }
 
 .post-page__master-post-title {
@@ -70,18 +71,7 @@
 
 .post-page__posts {
     margin-top: 1rem;
-}
-
-.post-page__posts table {
-    margin-top: 2rem;
-    width: 100%;
-    table-layout: fixed;
-    font-size: var(--font-size-small);
-    margin-bottom: 3rem;
-}
-
-.post-page__posts td {
-    padding-bottom: 2rem;
+    margin-bottom: 4rem;
 }
 
 .post-page__post {
@@ -131,6 +121,21 @@
     word-break: break-word;
 }
 
+.post-page__post {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+
+.post-page__post-meta {
+    width: 18%;
+}
+
+.post-page__post-content {
+    width: 98%;
+}
+
 .post-page__post-content-meta {
     display: flex;
     flex-direction: row;
@@ -142,6 +147,15 @@
 .post-page__post-content-meta svg {
     height: 1.5rem;
     width: 1.5rem;
+}
+
+.post-page__reply-go-up-mobile svg {
+    height: 1rem;
+    width: 1rem;
+}
+
+.post-page__reply-go-up-mobile path {
+    fill: var(--secondary-color);
 }
 
 .post-page__post-content-meta path {
@@ -255,6 +269,7 @@
 .post-page__reply-to-post-group {
     display: flex;
     flex-direction: column;
+    width: 100%;
     /* align-items: center;
     justify-content: center; */
 }
@@ -408,4 +423,67 @@
 .post-page__search svg {
     height: 2.5rem;
     width: 2.5rem;
+}
+
+.post-page__post-posted-at-mobile {
+    display: none;
+}
+
+.post-page__reply-go-up-mobile {
+    display: none !important;
+}
+
+.post-page__posts {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.post-page__reply {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .post-page__post {
+        flex-direction: column;
+    }
+
+    .post-page__post-posted-at {
+        display: none;
+    }
+
+    .post-page__post-meta {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .post-page__post-posted-at-mobile {
+        display: flex;
+    }
+
+    .post-page__post-meta-right-container {
+        width: 100%;
+        flex-direction: row-reverse;
+        margin-top: 0.5rem;
+    }
+
+    .post-page__reply-go-up {
+        display: none !important;
+    }
+
+    .post-page__reply-go-up-mobile {
+        display: flex !important;
+    }
+    
+    .post-page__post-options {
+        width: 100%;
+        flex-direction: row-reverse;
+        margin-top: 0.5rem;
+    }
+
+    .post-page textarea {
+        width: 95%;
+    }
 }
