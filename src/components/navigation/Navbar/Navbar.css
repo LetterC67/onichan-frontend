@@ -108,7 +108,6 @@
         transition: fill 0.3s ease;
         
     }
-    
 
     .navbar__user-info {
         gap: 0.75rem !important;
@@ -321,6 +320,7 @@
     z-index: 100000;
     opacity: 0;
     max-height: 75vh;
+    right: 5rem;
 
     padding: 0.5rem;
     padding-right: 0;
