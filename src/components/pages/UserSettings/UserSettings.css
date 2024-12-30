@@ -29,6 +29,12 @@
         gap: 1rem !important;
     }
 
+    .user-settings__tab-options {
+        gap: 2rem !important;
+        font-size: var(--font-size-small) !important;
+        width: 90vw !important;
+    }
+
 }
 
 .user-settings {

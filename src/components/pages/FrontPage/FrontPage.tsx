@@ -70,19 +70,36 @@ function FrontPage(): JSX.Element {
             smallestFontSize = getOptimalFontSize(element, minFont, maxFont);
 
             elements.forEach(el => {
-                console.log(el);
                 el.style.fontSize = `${smallestFontSize}px`;
             });
         }
       
-        window.addEventListener('load', () => {
-            applyFontSize('category__title');
-        });
+        if(document.readyState === 'complete') {
+            try {
+                applyFontSize('category__title');
+            } catch {
+                console.error('Failed to apply font size');
+            }
+        } else {
+            window.addEventListener('DOMContentLoaded', () => {
+                applyFontSize('category__title');
+            });
+        }
     
         window.addEventListener('resize', () => {
             applyFontSize('category__title');
         });
-    }, []);
+
+        return (): void => {
+            window.removeEventListener('DOMContentLoaded', () => {
+                applyFontSize('category__title');
+            });
+        
+            window.removeEventListener('resize', () => {
+                applyFontSize('category__title');
+            });
+        }
+    }, [categories]);
 
     useEffect(() => {
         getCategories().then((data: CategoryType[]) => {
