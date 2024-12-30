@@ -58,14 +58,17 @@ function FrontPage(): JSX.Element {
         function applyFontSize(className: string, minFont = 10, maxFont = 100): void {
             const elements: NodeListOf<HTMLDivElement> = document.querySelectorAll(`.${className}`);
             let smallestFontSize = maxFont;
-      
+
+            // select the element with smallest scroll width currently
+            let element: HTMLDivElement = elements[0];
             elements.forEach(el => {
-                const requiredFontSize = getOptimalFontSize(el, minFont, maxFont);
-                if (requiredFontSize < smallestFontSize) {
-                    smallestFontSize = requiredFontSize;
+                if (el.scrollWidth > element.scrollWidth) {
+                    element = el;
                 }
             });
-            
+
+            smallestFontSize = getOptimalFontSize(element, minFont, maxFont);
+
             elements.forEach(el => {
                 console.log(el);
                 el.style.fontSize = `${smallestFontSize}px`;

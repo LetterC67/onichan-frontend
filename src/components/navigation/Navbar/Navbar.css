@@ -65,13 +65,13 @@
     }
 
     .navbar svg {
-        width: 1.5rem !important;
-        height: 1.5rem !important;
+        width: 1.25rem !important;
+        height: 1.25rem !important;
     }
 
     .navbar img {
-        width: 1.5rem !important;
-        height: 1.5rem !important;
+        width: 1.25rem !important;
+        height: 1.25rem !important;
     }
 
     .navbar__logo-content {
@@ -110,9 +110,9 @@
     }
     
 
-    /* .navbar__user-info {
+    .navbar__user-info {
         gap: 0.75rem !important;
-    } */
+    }
 }
 
 .navbar__start-logo {

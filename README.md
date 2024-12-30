@@ -12,7 +12,7 @@ the web forum is fully functional equiped with essential features:
 - notification system
 - support for reporting inapproriate posts / admins can remove them
 
-currently, the frontend is optimized for pc only.
+currently, this frontend supports both pc and mobile, but more optimized for pc.
 
 ## installation
 
