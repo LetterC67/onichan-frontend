@@ -51,18 +51,20 @@ function PostComponent({ post, search, setReplyTo }: PostComponentProps): JSX.El
     };
     
     useEffect(() => {
-        if (post.reactions.length > 0) {
+        if (post.reactions != null && post.reactions.length > 0) {
             const reactionCounts = new Map<string, number>();
-            post.reactions.forEach((reaction) => {
-                reactionCounts.set(reaction.reaction.emoji, reaction.count);
-            });
+            if (post.reactions != null)
+                post.reactions.forEach((reaction) => {
+                    reactionCounts.set(reaction.reaction.emoji, reaction.count);
+                });
             setReactionCounts(reactionCounts);
         }
         
         const userReactions = new Set<string>();
-        post.user_reactions.forEach((reaction) => {
-            userReactions.add(reaction.reaction.emoji);
-        });
+        if (post.user_reactions != null)
+            post.user_reactions.forEach((reaction) => {
+                userReactions.add(reaction.reaction.emoji);
+            });
         setUserReactions(userReactions);
     }, [post]);
 
@@ -180,7 +182,7 @@ function PostComponent({ post, search, setReplyTo }: PostComponentProps): JSX.El
                     <Markdown remarkPlugins={[remarkGfm]} className={post.is_deleted ? 'deleted-post' : ''}>{post.content}</Markdown>
                 </div>
                 <div className="post-page__reactions">
-                    {post.reactions.map((reaction: PostReactionsCount) => (
+                    {(post.reactions != null) && post.reactions.map((reaction: PostReactionsCount) => (
                         <ReactionComponent 
                             key={reaction.reaction.emoji} 
                             reaction={reaction.reaction} 

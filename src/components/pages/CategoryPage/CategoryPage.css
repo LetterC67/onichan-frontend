@@ -97,11 +97,14 @@
     .category-post__left {
         width: 100%;
     }
+
+    .category-placeholder {
+        width: 2.5rem;
+    }
     
     .category-post__meta {
         width: 100%;
         text-align: left;
-        margin-left: 7rem;
         display: flex;
         flex-direction: row;
         gap: 1rem;
@@ -109,6 +112,11 @@
 
     .category-post__date {
         margin-top: 0;
+    }
+
+    .category-page__empty svg {
+        width: 5rem !important;
+        height: 5rem !important;
     }
 }
 
@@ -119,19 +127,10 @@
     margin-top: 1rem;
 }
 
-@media (min-width: 320px) {
-    .category-page {
-        width: 95%;
-        margin: 0 auto;
-    }	
-}
-
-@media (min-width: 1200px) {
-    .category-page  {
-        width: 800px;
-		margin: 0 auto;
-	}	
-}
+.category-page  {
+    width: 95%;
+    margin: 0 auto;
+}	
 
 @media (min-width: 1440px) {
 	.category-page  {

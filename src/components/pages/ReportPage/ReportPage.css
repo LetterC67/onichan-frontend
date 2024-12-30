@@ -32,3 +32,7 @@
 .report-page {
 	color: var(--primary-color);
 }
+
+.report-page .post-page__post-content {
+	font-size: var(--font-size-small);
+}

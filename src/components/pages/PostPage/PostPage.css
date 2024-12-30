@@ -1,19 +1,10 @@
-@media (min-width: 320px) {
-    .post-page {
-        width: 95%;
-        margin: 0 auto;
-    }	
-}
+
+.post-page {
+    width: 95%;
+    margin: 0 auto;
+}	
 
 @media (min-width: 1200px) {
-    .post-page  {
-        width: 800px;
-		margin: 0 auto;
-        margin-top: 1rem;
-	}	
-}
-
-@media (min-width: 1440px) {
 	.post-page  {
 		width: 55%;
 		margin: 0 auto;
@@ -70,7 +61,7 @@
 }
 
 .post-page__posts {
-    margin-top: 1rem;
+    margin-top: 2rem;
     margin-bottom: 4rem;
 }
 
@@ -133,7 +124,7 @@
 }
 
 .post-page__post-content {
-    width: 98%;
+    width: 100%;
 }
 
 .post-page__post-content-meta {
@@ -188,7 +179,7 @@
 
 .post-page__reply textarea{
     color: var(--primary-color);
-    width: 95%;
+    width: 100%;
     resize: none;
     font-family: 'Jua';
     font-size: var(--font-size-small);
@@ -340,6 +331,7 @@
     width: 100%;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     /* justify-content: center; */
     align-items: center;
     gap: 1rem;
@@ -364,6 +356,7 @@
     flex-direction: row;
     gap: 1rem;
     top: 2.5rem;
+    left: -9rem;
     background-color: transparent;
     padding: 0.5rem;
     border-radius: 0.5rem;
@@ -467,6 +460,7 @@
         width: 100%;
         flex-direction: row-reverse;
         margin-top: 0.5rem;
+        gap: 2rem;
     }
 
     .post-page__reply-go-up {
@@ -483,7 +477,17 @@
         margin-top: 0.5rem;
     }
 
-    .post-page textarea {
-        width: 95%;
+    .post-page__master-post-meta {
+        font-size: var(--font-size-x-small);
+    }
+
+    .post-page__master-post-meta svg {
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+
+    .post-page__empty svg {
+        width: 5rem !important;
+        height: 5rem !important;
     }
 }

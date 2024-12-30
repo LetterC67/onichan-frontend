@@ -17,7 +17,8 @@ function Search({category}: SearchProps): JSX.Element {
     function removeLastPageSegment(pathname: string): string {
         const segments = pathname.split('/');
         const lastSegment = segments[segments.length - 1];
-        if (!isNaN(Number(lastSegment))) {
+        const secondToLastSegment = segments[segments.length - 2];
+        if (!isNaN(Number(lastSegment)) && !isNaN(Number(secondToLastSegment))) {
             return segments.slice(0, -1).join('/');
         }
         return pathname;

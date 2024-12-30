@@ -81,6 +81,8 @@ function CategoryPage(): JSX.Element {
                                         </div>
                                     </div>
                                     <div className="category-post__meta">
+                                        <div className="category-placeholder">
+                                        </div>
                                         <div className="category-post__date">
                                             {new Date(post.last_updated).toLocaleString('en-US', {
                                                 year: 'numeric',

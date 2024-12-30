@@ -46,13 +46,9 @@ function ReportPage(): JSX.Element {
                                 <span>nobody here but us chickens</span>
                             </div>
                         }
-                        <table>
-                            <tbody>
-                                {reports.map((report) => (
-                                    <ReportComponent report={report} />
-                                ))}
-                            </tbody>
-                        </table>
+                        {reports.map((report) => (
+                            <ReportComponent report={report} />
+                        ))}
                     </div>
                 </div>
             }
