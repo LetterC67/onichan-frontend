@@ -89,6 +89,7 @@ function PostPage(): JSX.Element {
                     console.warn("ignore stale state");
                     return;
                 }
+                setMasterPost(data.master_post ?? {} as Post);
                 setPosts(data.posts ?? []);
                 setMaxPages(data.total_pages ?? 1);
             }).catch((error) => {
@@ -134,7 +135,7 @@ function PostPage(): JSX.Element {
                         <div className="post-page__master-post-username">
                             <UserSVG />
                             <span>
-                                {masterPost?.user.username}
+                                {masterPost?.user?.username}
                             </span>
                         </div>
                         <div className="post-page__master-post-time">
