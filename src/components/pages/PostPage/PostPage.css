@@ -102,6 +102,15 @@
     height: 3rem;
 }
 
+.post-page__post-meta {
+    word-break: break-all;
+    width: 100%;
+}
+
+.post-page__post-meta {
+    padding-right: 0.5rem;
+}
+
 .post-page__posts td:nth-child(1) {
     width: 15%;
     word-break: break-word;

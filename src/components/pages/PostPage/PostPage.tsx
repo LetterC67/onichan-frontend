@@ -63,7 +63,7 @@ function PostPage(): JSX.Element {
             }
         }
 
-        console.log(`Got a new message: ${JSON.stringify(lastJsonMessage)}`);
+        // console.log(`Got a new message: ${JSON.stringify(lastJsonMessage)}`);
     }, [lastJsonMessage, id, page, user]);
 
     useEffect(() => {
@@ -77,14 +77,19 @@ function PostPage(): JSX.Element {
     }, [goto, posts, user]);
 
     useEffect(() => {
+        let ignore = false;
+
         if (search == '') {
             let userID = 0;
             if(user) {
                 userID = user.ID;
             }
             getPost(id, userID.toString(), page).then((data: GetPostResponse) => {
+                if (ignore) {
+                    console.warn("ignore stale state");
+                    return;
+                }
                 setPosts(data.posts ?? []);
-                setMasterPost(data.master_post ?? {} as Post);
                 setMaxPages(data.total_pages ?? 1);
             }).catch((error) => {
                 console.error('Failed to fetch posts:', error);
@@ -101,7 +106,10 @@ function PostPage(): JSX.Element {
                 notification("Failed to fetch posts", "error");
             });
         }
-        
+
+        return (): void => {
+            ignore = true;
+        }
     }, [page, goto, search, user, id, notification]);
 
     function onPageChange(page: string | number): void {
