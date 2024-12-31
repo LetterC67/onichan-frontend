@@ -76,8 +76,10 @@ function PostComponent({ post, search, setReplyTo }: PostComponentProps): JSX.El
 
         toggleReaction(post.ID, reaction.ID).then((data: ToggleReactionResponse) => {
             if (data.message === "Reaction added") {
+                notification("reaction added " + reaction.emoji);
                 addReaction(reaction.emoji);
             } else if (data.message === "Reaction removed") {
+                notification("reaction removed " + reaction.emoji);
                 removeReaction(reaction.emoji);
             }
         }).catch(() => {
