@@ -1,8 +1,12 @@
 # onichan
 
+the forum is accessible at: https://onichan.zapto.org/
+
 this is this repo containing the frontend for onichan webforum. the backend is available [here](https://github.com/LetterC67/onichan-backend).
 
-the web forum is fully functional equiped with essential features:
+the frontend communicates with backend through rest api.
+
+the web forum is fully functional, equiped with essential features:
 - users creation and profile customization
 - users auth essentials (password, avatar, email modifications)
 - role-based access control
@@ -41,19 +45,16 @@ npm run build
 ```
 
 ## docker setup
-alternatively, one can run the frontend as a docker container. make sure you have docker installed.
+alternatively, one can run the frontend as a docker container. make sure you have docker installed. 
 
-build the docker image:
+firstly, config the domain in `default.conf` and `.env` file: replace all instances of `onichan.zapto.org` with your domain. 
+
+build & run the docker containers:
   ```sh
-  docker build -t onichan-frontend .
+  docker compose up -d --build
   ```
 
-run the docker container:
-  ```sh
-  docker run -p 80:80 -d onichan-frontend
-  ```
-
-the application will be available at `http://localhost`, or whatever port you desire.
+the application will then be available at `https://your-domain`.
 
 
 ## acknowledgement 
