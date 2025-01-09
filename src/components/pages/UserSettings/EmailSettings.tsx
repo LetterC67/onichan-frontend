@@ -5,6 +5,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { drawRoughBorder } from "../../utils";
 import { Input } from "../../utils";
 import { ChangeEmailResponse } from "../../../interfaces";
+import useTopLoadingBar from "../../../hooks/useTopLoadingBar";
 
 function EmailSettings(): JSX.Element {
     const [email, setEmail] = useState<string>("");
@@ -16,6 +17,7 @@ function EmailSettings(): JSX.Element {
     const showNotification = useNotification();
 
     const { reload } = useAuth();
+    const { start, complete } = useTopLoadingBar();
 
     useEffect (() => {
         drawRoughBorder(currentPasswordCanvasRef);
@@ -33,6 +35,8 @@ function EmailSettings(): JSX.Element {
             return;
         }
 
+        start();
+
         changeEmail(password, email).then((data: ChangeEmailResponse) => {
             if(data.error != null) {
                 showNotification(data.error.toLowerCase(), "error");
@@ -44,6 +48,8 @@ function EmailSettings(): JSX.Element {
         }).catch(() => {
             showNotification("Failed to change email", "error");
         });
+
+        complete();
     }, [email, password, showNotification, reload]);
 
     useEffect(() => {

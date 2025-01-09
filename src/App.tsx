@@ -5,6 +5,7 @@ import FrontPage from './components/pages/FrontPage/FrontPage.tsx'
 import PostPage from './components/pages/PostPage/PostPage.tsx';
 import Register  from './components/pages/Auth/Register/Register.tsx';
 import Login from './components/pages/Auth/Login/Login.tsx';
+import ForgotPassword from './components/pages/Auth/ForgotPassword/ForgotPassword.tsx';
 import CreatePost from './components/pages/CreatePost/CreatePost.tsx';
 import UserSettings from './components/pages/UserSettings/UserSettings.tsx';
 import ReportPage from './components/pages/ReportPage/ReportPage.tsx';
@@ -12,6 +13,7 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import 'overlayscrollbars/overlayscrollbars.css';
+import ResetPassword from './components/pages/Auth/ResetPassword/ResetPassword.tsx';
 
 function ScrollToTop(): null {
     const { pathname } = useLocation();
@@ -36,8 +38,10 @@ function App(): JSX.Element {
 				<Route path="/reports" element={<ReportPage />} />
 				<Route path="/reports/:page" element={<ReportPage />} />
 				<Route path="/settings" element={<UserSettings />} />
+				<Route path="/reset-password" element={<ResetPassword />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
+				<Route path="/forgot-password" element={<ForgotPassword />} />
 				<Route path="/" element={<FrontPage />} />
 				<Route path="/category/:id/create-post" element={<CreatePost />} />
 				<Route path="/category/:id" element={<CategoryPage />} />

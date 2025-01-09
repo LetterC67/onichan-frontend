@@ -8,6 +8,8 @@ import 'overlayscrollbars/overlayscrollbars.css';
 import { NotificationProvider } from './contexts/NotificationContext.tsx';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import { CategoryProvider } from './contexts/CategoryContext.tsx'
+import { LoadingBarContainer } from "react-top-loading-bar";
+
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement!);
@@ -19,7 +21,9 @@ root.render(
 			<CategoryProvider>
 				<AuthProvider>
 					<NotificationProvider>
-						<App />
+						<LoadingBarContainer>
+							<App />
+						</LoadingBarContainer>
 					</NotificationProvider>
 				</AuthProvider>
 			</CategoryProvider>

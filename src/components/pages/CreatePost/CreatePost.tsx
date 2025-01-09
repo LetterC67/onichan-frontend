@@ -12,7 +12,7 @@ import { API_URL } from "../../../api/apiClient";
 import { useAuth } from "../../../contexts/AuthContext";
 import { scrollToBottom } from "../../utils";
 import { CreatePostResponse, UploadResponse } from "../../../interfaces";
-
+import useTopLoadingBar from "../../../hooks/useTopLoadingBar";
 import { EyeSVG, EditSVG, TickSVG, PlusSVG } from "../../svg";
 
 function CreatePost(): JSX.Element {
@@ -24,6 +24,7 @@ function CreatePost(): JSX.Element {
     const navigate = useNavigate();
     const {user} = useAuth();
     const { category } = useCategory();
+    const { start, complete } = useTopLoadingBar();
 
     useEffect(() => {
         textareaRef.current?.focus();
@@ -74,12 +75,18 @@ function CreatePost(): JSX.Element {
     }, [notification, textareaValue]);
 
     function onPost(): void {
+        if(title === "" || textareaValue === "") {
+            notification("please fill in all fields", "error");
+            return;
+        }
+        start();
         post(category ? category.ID : 0, textareaValue, title).then((data: CreatePostResponse) => {
             notification("post created successfully", "success");
             void navigate(`/category/${category?.ID}/post/${data.id}`);
         }).catch(() => {
             notification("failed to create post", "success");
         });
+        complete();
     }
 
     return (

@@ -106,7 +106,14 @@
         
         fill: var(--secondary-color);
         transition: fill 0.3s ease;
-        
+    }
+
+    @supports (-moz-appearance:none) {
+        .navbar__start-return svg {
+            top: 2rem !important;
+            height: 0.5rem;
+            width: 0.5rem;
+        }
     }
 
     .navbar__user-info {
@@ -115,6 +122,10 @@
 
     .navbar__user-options {
         right: 0 !important;
+    }
+
+    .navbar__notifications {
+        width: 95vw !important;
     }
 }
 
@@ -141,6 +152,12 @@
     top: 1.5rem;
     fill: var(--secondary-color);
     transition: fill 0.3s ease;
+}
+
+@supports (-moz-appearance:none) {
+    .navbar__start-return svg {
+        top: 3.8rem;
+    }
 }
 
 .navbar__start-return svg:hover {

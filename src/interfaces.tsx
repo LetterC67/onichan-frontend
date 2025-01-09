@@ -161,6 +161,15 @@ interface ChangeAvatarResponse {
     error?: string;
 }
 
+interface ForgotPasswordResponse {
+    message?: string;
+    error?: string;
+}
+
+interface ResetPasswordResponse {
+    password?: string;
+    error?: string;
+}
 
 export type {
     Category,
@@ -186,5 +195,7 @@ export type {
     RegisterResponse,
     ChangeEmailResponse,
     ChangePasswordResponse,
-    ChangeAvatarResponse
+    ChangeAvatarResponse,
+    ForgotPasswordResponse,
+    ResetPasswordResponse
 }
