@@ -6,6 +6,7 @@ import { getPosts, searchTitle } from "../../../api/post";
 import { SearchSVG, ChickenSVG } from "../../svg";
 import Loading from "../../Loading";
 import { Post, SearchResponse, GetPostsResponse } from "../../../interfaces";
+import useTopLoadingBar from "../../../hooks/useTopLoadingBar";
 
 function CategoryPage(): JSX.Element {
     const navigate = useNavigate();
@@ -16,10 +17,19 @@ function CategoryPage(): JSX.Element {
     const searchParams = new URLSearchParams(location.search);
     const search = searchParams.get('search') ?? '';
     const [posts, setPosts] = useState<Post[] | null>(null);
+    const { start, complete } = useTopLoadingBar();
 
     useEffect(() => {
+        let ignore = false;
+
+        start();
+
         if(search !== '') {
             searchTitle(page, search, id).then((data: SearchResponse) => {
+                if (ignore) {
+                    console.warn("ignore stale state");
+                    return;
+                }
                 setPosts(data.posts ?? []);
                 setMaxPages(data.total_pages ?? 1);
             }).catch((error) => {
@@ -28,6 +38,10 @@ function CategoryPage(): JSX.Element {
             });
         } else {
             getPosts(id, page).then((data: GetPostsResponse) => {
+                if (ignore) {
+                    console.warn("ignore stale state");
+                    return;
+                }
                 setPosts(data.posts ?? []);
                 setMaxPages(data.total_pages ?? 1);
             }).catch((error) => {
@@ -35,6 +49,12 @@ function CategoryPage(): JSX.Element {
                 setPosts([]);
             });
         }
+
+        complete();
+
+        return (): void => {
+            ignore = true;
+        };
     }, [page, search, id]);
 
     function onPageChange(page: string | number): void {

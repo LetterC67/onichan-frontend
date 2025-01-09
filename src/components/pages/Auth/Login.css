@@ -5,6 +5,7 @@
     margin: 0 auto;
     height: 80vh;
     max-width: 90vw;
+    color: var(--primary-color)
 }
 
 .login__content {
@@ -55,6 +56,17 @@
 }
 
 .login__button:hover {
+    color: var(--accent-color);
+    cursor: pointer;
+}
+
+.login__forgot-password {
+    font-size: var(--font-size-x-small);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login__forgot-password:hover {
     color: var(--accent-color);
     cursor: pointer;
 }

@@ -3,6 +3,7 @@ import { Input } from "../../utils";
 import { changePassword } from "../../../api/auth";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNotification } from "../../../contexts/NotificationContext";
+import useTopLoadingBar from "../../../hooks/useTopLoadingBar";
 
 function PasswordSettings(): JSX.Element {
     const [currentPassword, setCurrentPassoword] = useState<string>("");
@@ -15,6 +16,8 @@ function PasswordSettings(): JSX.Element {
     const passwordCanvasRef = useRef<HTMLCanvasElement>(null);
     const confirmPasswordCanvasRef = useRef<HTMLCanvasElement>(null);
 
+    const { start, complete } = useTopLoadingBar();
+
     const onChangePassword = useCallback((): void => {
         if (password !== confirmPassword) {
             showNotification("Passwords do not match", "error");
@@ -26,6 +29,8 @@ function PasswordSettings(): JSX.Element {
             return;
         }
 
+        start();
+
         changePassword(currentPassword, password).then((data) => {
             if(data.error != null) {
                 showNotification(data.error.toLowerCase(), "error");
@@ -36,6 +41,8 @@ function PasswordSettings(): JSX.Element {
         }).catch(() => {
             showNotification("Failed to change password", "error");
         });
+
+        complete();
     }, [currentPassword, password, confirmPassword, showNotification]);
 
     useEffect (() => {

@@ -1,6 +1,6 @@
 import { apiClient } from "./apiClient";
 import axios from 'axios';
-import { ChangeAvatarResponse, ChangeEmailResponse, ChangePasswordResponse, LoginResponse, RegisterResponse } from "../interfaces";
+import { ChangeAvatarResponse, ChangeEmailResponse, ChangePasswordResponse, LoginResponse, RegisterResponse, ForgotPasswordResponse, ResetPasswordResponse } from "../interfaces";
 
 async function login(username: string, password: string): Promise<LoginResponse> {
     try {
@@ -87,10 +87,42 @@ async function changeAvatar(avatarURL: string): Promise<ChangeAvatarResponse> {
     }
 }
 
+async function forgotPassword(email: string): Promise<ForgotPasswordResponse> {
+    try {
+        const response = await apiClient.post(`/auth/forgot-password`, {
+            email: email,
+        });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            return { error: error.response.data.error };
+        } else {
+            return { error: 'An unexpected error occurred' };
+        }
+    }
+}
+
+async function resetPassword(token: string): Promise<ResetPasswordResponse> {
+    try {
+        const response = await apiClient.post(`/auth/reset-password`, {
+            token: token,
+        });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            return { error: error.response.data.error };
+        } else {
+            return { error: 'An unexpected error occurred' };
+        }
+    }
+}
+
 export {
     login,
     register,
     changePassword,
     changeEmail,
     changeAvatar,
-}
+    forgotPassword,
+    resetPassword,
+};

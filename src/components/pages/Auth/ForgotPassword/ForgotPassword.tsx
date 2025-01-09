@@ -2,58 +2,51 @@ import "./../Login.css";
 import { useEffect, useState, useRef, useCallback } from "react";
 import LoginSVG from "../../../../assets/images/login.svg"
 import { useNotification } from "../../../../contexts/NotificationContext";
+import { forgotPassword } from "../../../../api/auth";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../../contexts/AuthContext";
 import { Input } from "../../../utils";
 import { drawRoughBorder } from "../../../utils";
-import { LoginResponse } from "../../../../interfaces";
+import { ForgotPasswordResponse } from "../../../../interfaces";
 import useTopLoadingBar from "../../../../hooks/useTopLoadingBar";
 
-
 function Login(): JSX.Element {
-    const [username, setUsername] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
     const showNotification  = useNotification();
     const navigate = useNavigate();
 
-    const usernameCanvasRef = useRef<HTMLCanvasElement>(null);
-    const passwordCanvasRef = useRef<HTMLCanvasElement>(null);
-
-    const { login } = useAuth();
+    const emailCanvasRef = useRef<HTMLCanvasElement>(null);
 
     const { start, complete } = useTopLoadingBar();
 
-    const onLogin = useCallback((): void => {
-        if (username === "" || password === "") {
-            showNotification("please fill in all fields", "error");
+    useEffect(() => {
+        drawRoughBorder(emailCanvasRef);
+    }, []);
+
+    const onForgotPassword = useCallback((): void => {
+        if (email === "") {
+            showNotification("please enter email", "error");
             return;
         }
-        
+
         start();
 
-        login(username, password).then((data: LoginResponse) => {
-            if (data.error != null) {
+        forgotPassword(email).then((data: ForgotPasswordResponse) => {
+            if(data.error != null) {
                 showNotification(data.error.toLowerCase(), "error");
             } else {
-                showNotification("login successful", "success");
-                void navigate("/");
+                showNotification("password reset email sent", "success");
             }
-        }).catch (() => {
+        }).catch(() => {
             showNotification("an unexpected error occurred", "error");
         }).finally(() => {
             complete();
         });
-    }, [username, password, showNotification, navigate, login]);
-
-    useEffect(() => {
-        drawRoughBorder(usernameCanvasRef);
-        drawRoughBorder(passwordCanvasRef);
-    }, []);
+    }, [email, showNotification, navigate, start, complete]);
 
     useEffect(() => {
         const handleEnter = (event: KeyboardEvent): void => {
             if (event.key === "Enter") {
-                onLogin();
+                onForgotPassword();
             }
         };
 
@@ -62,7 +55,7 @@ function Login(): JSX.Element {
         return (): void => {
             document.removeEventListener("keydown", handleEnter);
         };
-    }, [username, password, onLogin]);
+    }, [email]);
 
     return (
         <div className="login">
@@ -71,17 +64,12 @@ function Login(): JSX.Element {
                     <img src={LoginSVG} alt="login" style={{width: "100%", height: "4rem"}}/>
                 </div>
                 
-                <Input type="text" canvasRef={usernameCanvasRef} value={username} setValue={setUsername} placeholder="username"></Input>
+                <Input type="text" canvasRef={emailCanvasRef} value={email} setValue={setEmail} placeholder="email"></Input>
 
-                <Input type="password" canvasRef={passwordCanvasRef} value={password} setValue={setPassword} placeholder="password"></Input>
                 <div className="login__options">
-                    <div className="login__button" onClick={onLogin}>
-                        login
+                    <div className="login__button" onClick={onForgotPassword}>
+                        reset password
                     </div>
-                </div>
-
-                <div className="login__forgot-password" onClick={() => void navigate("/forgot-password")}>
-                    <span>forgot passwd?</span>
                 </div>
             </div>
         </div>

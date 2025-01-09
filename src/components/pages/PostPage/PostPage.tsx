@@ -10,7 +10,7 @@ import useWebSocket from "react-use-websocket";
 import { useCategory } from "../../../contexts/CategoryContext";
 import Loading from "../../Loading";
 import { GetPostResponse, Post, SearchResponse } from "../../../interfaces";
-
+import useTopLoadingBar from "../../../hooks/useTopLoadingBar";
 import PostComponent from "./PostComponent";
 import ReplyBox from "./ReplyBox";
 import { scrollPostIntoView } from "../../utils";
@@ -32,6 +32,8 @@ function PostPage(): JSX.Element {
     const navigate = useNavigate();
     const { category } = useCategory();
     const notification = useNotification();
+
+    const { start, complete } = useTopLoadingBar();
 
     const goto:string = searchParams.get('goto') ?? '';
     const search:string = searchParams.get('search') ?? '';
@@ -78,6 +80,8 @@ function PostPage(): JSX.Element {
 
     useEffect(() => {
         let ignore = false;
+        
+        start();
 
         if (search == '') {
             let userID = 0;
@@ -107,6 +111,8 @@ function PostPage(): JSX.Element {
                 notification("Failed to fetch posts", "error");
             });
         }
+
+        complete();
 
         return (): void => {
             ignore = true;
