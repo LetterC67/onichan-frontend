@@ -1,6 +1,4 @@
 import rough from "roughjs";
-import { useLoadingBar } from "react-top-loading-bar";
-
 
 const scrollToBottom = (): void => {
     window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
