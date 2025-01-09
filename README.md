@@ -8,7 +8,7 @@ the frontend communicates with backend through rest api.
 
 the web forum is fully functional, equiped with essential features:
 - users creation and profile customization
-- users auth essentials (password, avatar, email modifications)
+- users auth essentials (password, avatar, email modifications / forgot password)
 - role-based access control
 - post categories
 - post reactions
